@@ -25,11 +25,9 @@
       "username": "hemanth",
       "passcode": "hemanth2026",
       "initialBudget": 1000,
-      "remainingBudget": 810,
-      "spent": 190,
-      "players": [
-        "imported-1789742167651-2"
-      ]
+      "remainingBudget": 1000,
+      "spent": 0,
+      "players": []
     },
     {
       "id": "team-2",
@@ -125,7 +123,7 @@
   ],
   "players": [
     {
-      "id": "imported-1789742167650-1",
+      "id": "imported-1789746468683-1",
       "name": "Teja chinni",
       "photo": "IMG-20260914-WA0001 - Teja Chinni.jpg",
       "rollNumber": "24A81A0610",
@@ -137,10 +135,11 @@
       "basePrice": 20,
       "status": "Available",
       "queueOrder": 1,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1
     },
     {
-      "id": "imported-1789742167651-2",
+      "id": "imported-1789746468684-2",
       "name": "padala kowshik",
       "photo": "https://lh3.googleusercontent.com/d/1d-hy3ZJuRkbucgDV0SPeoEWDMHsnvrY3=w1000",
       "rollNumber": "24A81A05S7",
@@ -150,16 +149,13 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Sold",
+      "status": "Live",
       "queueOrder": 2,
       "notes": "Imported from Google Sheet",
-      "round": 1,
-      "soldTo": "team-1",
-      "soldToTeamName": "Shuttle Trouble",
-      "finalPrice": 190
+      "round": 1
     },
     {
-      "id": "imported-1789742167651-3",
+      "id": "imported-1789746468685-3",
       "name": "Kowshik K",
       "photo": "https://lh3.googleusercontent.com/d/1H3sBbTiRCI0eKLZZDvjZnYyLXXA07E6J=w1000",
       "rollNumber": "24A81A05F8",
@@ -175,7 +171,7 @@
       "round": 1
     },
     {
-      "id": "imported-1789742167651-4",
+      "id": "imported-1789746468685-4",
       "name": "Kavuru Bala Siva",
       "photo": "https://lh3.googleusercontent.com/d/1SiBspmw5MgKh82yahycegjWs6-sZXv1i=w1000",
       "rollNumber": "25",
@@ -185,13 +181,12 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Live",
+      "status": "Available",
       "queueOrder": 4,
-      "notes": "Imported from Google Sheet",
-      "round": 1
+      "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-5",
+      "id": "imported-1789746468687-5",
       "name": "Tadepalli.Vinodh",
       "photo": "https://lh3.googleusercontent.com/d/1uu8lrTpgo5-DcZ5NztExsbTbQffsROHV=w1000",
       "rollNumber": "25A81A43I8",
@@ -206,7 +201,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-6",
+      "id": "imported-1789746468687-6",
       "name": "A SRI CHARAN",
       "photo": "https://lh3.googleusercontent.com/d/1PWYb08jzpVSbHdGRhnofsAC4_39nO6p6=w1000",
       "rollNumber": "25A81A05Q8",
@@ -221,7 +216,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-7",
+      "id": "imported-1789746468687-7",
       "name": "Dhruvan",
       "photo": "https://lh3.googleusercontent.com/d/1z90Q7v-U-IB5imAwp4zQY1Gjc3STgjNw=w1000",
       "rollNumber": "24a81a05j3",
@@ -236,7 +231,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-8",
+      "id": "imported-1789746468687-8",
       "name": "Jagan",
       "photo": "https://lh3.googleusercontent.com/d/1zeFpITRXH0SAkv6dXYANWM-gLv3nzt09=w1000",
       "rollNumber": "25A81A61G1",
@@ -251,7 +246,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-9",
+      "id": "imported-1789746468687-9",
       "name": "Jagu Uday Naga Rama Krishna",
       "photo": "https://lh3.googleusercontent.com/d/1J7v6Drdj0ZqQ2oQ0dPUv09QEt0DXCklh=w1000",
       "rollNumber": "24a81a4380",
@@ -266,7 +261,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167651-10",
+      "id": "imported-1789746468688-10",
       "name": "T Harshavardhan",
       "photo": "https://lh3.googleusercontent.com/d/1pHEmm3rGZSujVRWUz5G887_6urCCxjLW=w1000",
       "rollNumber": "084/CAI/2027",
@@ -281,7 +276,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-11",
+      "id": "imported-1789746468689-11",
       "name": "Davuluri Thanveer",
       "photo": "https://lh3.googleusercontent.com/d/1hxsurxm7q8_kZOCl0l_7y9mbaY3ZN8Gp=w1000",
       "rollNumber": "017/CSD/2026",
@@ -296,7 +291,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-12",
+      "id": "imported-1789746468689-12",
       "name": "P.Jogendra",
       "photo": "https://lh3.googleusercontent.com/d/1HqicCS6GKlQAaXlY6XW34fedn1bbAJYY=w1000",
       "rollNumber": "24a81a4447",
@@ -311,7 +306,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-13",
+      "id": "imported-1789746468689-13",
       "name": "Tadepalli Vivek",
       "photo": "https://lh3.googleusercontent.com/d/1PheHgGugbF_QZw6b0OqEMaCz55ylZsO6=w1000",
       "rollNumber": "24A81A0558",
@@ -326,7 +321,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-14",
+      "id": "imported-1789746468689-14",
       "name": "M Jaswanth gupta",
       "photo": "https://lh3.googleusercontent.com/d/1mnxYx_a2xQT9mwgP1oyDIHyRzDl4y0Ne=w1000",
       "rollNumber": "25a81a0633",
@@ -341,7 +336,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-15",
+      "id": "imported-1789746468689-15",
       "name": "K.vamsi",
       "photo": "https://lh3.googleusercontent.com/d/156q-BQVI3jCQODv_kLD8uc3_seUPfglX=w1000",
       "rollNumber": "25A81A0233",
@@ -356,7 +351,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-16",
+      "id": "imported-1789746468689-16",
       "name": "G.Praveen Kumar",
       "photo": "https://lh3.googleusercontent.com/d/1Kz2e_hwF-vc-44si58vea4hMMS21KT5P=w1000",
       "rollNumber": "25A81A05l8",
@@ -371,7 +366,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167652-17",
+      "id": "imported-1789746468690-17",
       "name": "Kadali sai Nikhil",
       "photo": "https://lh3.googleusercontent.com/d/1zJGjvemkm3xqKAnM1tKY2vGMfUUemLgc=w1000",
       "rollNumber": "25A81A0324",
@@ -386,7 +381,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-18",
+      "id": "imported-1789746468690-18",
       "name": "Dharma Teja",
       "photo": "https://lh3.googleusercontent.com/d/140uJk1BQgg3e7WFAljS5j8Nx9FWC5gFx=w1000",
       "rollNumber": "242",
@@ -401,7 +396,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-19",
+      "id": "imported-1789746468691-19",
       "name": "I Harsha vardhan",
       "photo": "https://lh3.googleusercontent.com/d/1qTQhtRuOaHlH-ZFWdHFOApPdAK0AuhtH=w1000",
       "rollNumber": "HOSTEL-118",
@@ -416,7 +411,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-20",
+      "id": "imported-1789746468691-20",
       "name": "Y. Ajay",
       "photo": "https://lh3.googleusercontent.com/d/1fVgMMYoLTP-OEcQdnVUoxvX3eOIF7UGn=w1000",
       "rollNumber": "24A81A0562",
@@ -431,7 +426,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-21",
+      "id": "imported-1789746468691-21",
       "name": "Y.S.D.Srinivas",
       "photo": "https://lh3.googleusercontent.com/d/1zRTrWE0noYdeOGWWAcltlhxMFk_Js1wm=w1000",
       "rollNumber": "022/AIM/2026",
@@ -446,7 +441,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-22",
+      "id": "imported-1789746468691-22",
       "name": "Margana Mahesh",
       "photo": "https://lh3.googleusercontent.com/d/1DkdhfAK_CcM8pDVSv0WQooTMHFLeUeXR=w1000",
       "rollNumber": "057/ECT/2026",
@@ -461,7 +456,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-23",
+      "id": "imported-1789746468691-23",
       "name": "Reddi Sai",
       "photo": "https://lh3.googleusercontent.com/d/1i5UaTNOlhkZrGoBT2_GODFdNlAvh3dsJ=w1000",
       "rollNumber": "24A81A4348",
@@ -476,7 +471,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-24",
+      "id": "imported-1789746468691-24",
       "name": "Sai charith",
       "photo": "https://lh3.googleusercontent.com/d/1qJRu_XAXbo-J7vjQ_NAQ3J9Oz9nl2CFT=w1000",
       "rollNumber": "286",
@@ -491,7 +486,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-25",
+      "id": "imported-1789746468693-25",
       "name": "T saikumar",
       "photo": "https://lh3.googleusercontent.com/d/1gRRII1jQPsTLBoL0_y1SRlgFxvPY98DI=w1000",
       "rollNumber": "25a81a0658",
@@ -506,7 +501,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167654-26",
+      "id": "imported-1789746468694-26",
       "name": "Dusanapudi pandu jaswanth",
       "photo": "https://lh3.googleusercontent.com/d/1uRwQn2xlXjHrcj90SoOD-Lln9sRBBrDH=w1000",
       "rollNumber": "25a81a4412",
@@ -521,7 +516,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-27",
+      "id": "imported-1789746468694-27",
       "name": "Sanjeev",
       "photo": "https://lh3.googleusercontent.com/d/1jFlpibZu-CS0e0xF-YEI95K0KY-VHqGI=w1000",
       "rollNumber": "25a81a0543",
@@ -536,7 +531,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-28",
+      "id": "imported-1789746468694-28",
       "name": "Harsha",
       "photo": "https://lh3.googleusercontent.com/d/1f105Cdfg0ZJvM4qllu7qnuX09OPjJdsF=w1000",
       "rollNumber": "25A81A0549",
@@ -551,7 +546,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-29",
+      "id": "imported-1789746468694-29",
       "name": "J.srinivas",
       "photo": "https://lh3.googleusercontent.com/d/1Rji3UphxWgtur_G6Ij046xpgab_vCInX=w1000",
       "rollNumber": "25a81a0533",
@@ -566,7 +561,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-30",
+      "id": "imported-1789746468694-30",
       "name": "Kone Yogeswar",
       "photo": "https://lh3.googleusercontent.com/d/198TTSJVu_RZnEkZtTLkbbRQXK_wxa1Yg=w1000",
       "rollNumber": "100",
@@ -581,7 +576,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-31",
+      "id": "imported-1789746468694-31",
       "name": "Kasey joshua daniel",
       "photo": "https://lh3.googleusercontent.com/d/1day7xbUdklP2N1_S7wa0eUeyztSyFO4Z=w1000",
       "rollNumber": "26243EC025",
@@ -596,7 +591,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-32",
+      "id": "imported-1789746468694-32",
       "name": "Ch.harsha kumar",
       "photo": "https://lh3.googleusercontent.com/d/18fr79vPqwPiGmzbr9_yUrWoUtOE21ULq=w1000",
       "rollNumber": "26243EC012",
@@ -611,7 +606,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-33",
+      "id": "imported-1789746468695-33",
       "name": "Thimmaiah Teja",
       "photo": "https://lh3.googleusercontent.com/d/1j6fPKLhoiW5D-uwE3FxO47TiZLu98a22=w1000",
       "rollNumber": "165",
@@ -626,7 +621,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-34",
+      "id": "imported-1789746468695-34",
       "name": "Ch Vamsi",
       "photo": "https://lh3.googleusercontent.com/d/1mWgWMzQ2n6aZpRetmqZ1qz-KU0xbT1g6=w1000",
       "rollNumber": "24A81A04E0",
@@ -641,7 +636,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-35",
+      "id": "imported-1789746468695-35",
       "name": "D.Amar Teja",
       "photo": "https://lh3.googleusercontent.com/d/1N8qgzIt-pTtYnLA1D-DciWFb-tah9kU9=w1000",
       "rollNumber": "26243EE010",
@@ -656,7 +651,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-36",
+      "id": "imported-1789746468695-36",
       "name": "NANDURI GIRISH",
       "photo": "https://lh3.googleusercontent.com/d/1HwP6EqQx42PmcrZ0Mtv8lvo4CXUzWmzk=w1000",
       "rollNumber": "26243ME039",
@@ -671,7 +666,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-37",
+      "id": "imported-1789746468695-37",
       "name": "Yeshwanth",
       "photo": "https://lh3.googleusercontent.com/d/13utIUv9kwY-XpUV6SRgM9eymlTBCJb49=w1000",
       "rollNumber": "26243CM084",
@@ -686,7 +681,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167655-38",
+      "id": "imported-1789746468695-38",
       "name": "N Varun kumar",
       "photo": "https://lh3.googleusercontent.com/d/124diSy9281AYYLuK7kRVaGQ_Ger-hbUA=w1000",
       "rollNumber": "25A81A1437",
@@ -701,7 +696,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-39",
+      "id": "imported-1789746468696-39",
       "name": "Regani Jaya surya",
       "photo": "https://lh3.googleusercontent.com/d/1tMkt4OA_GKGT7arM9QwBaxieMx7OxBRF=w1000",
       "rollNumber": "25A81A04B4",
@@ -716,7 +711,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-40",
+      "id": "imported-1789746468696-40",
       "name": "Nanduriganesh",
       "photo": "https://lh3.googleusercontent.com/d/1bhmEFwKcJCJRxpX6byIcn4edGMOfgcSS=w1000",
       "rollNumber": "26243me038",
@@ -731,7 +726,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-41",
+      "id": "imported-1789746468696-41",
       "name": "SUBBU",
       "photo": "https://lh3.googleusercontent.com/d/18yRD5UT18aYN3UJU59Ek7NPOXUMSmWhE=w1000",
       "rollNumber": "25A81A04N5",
@@ -746,7 +741,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-42",
+      "id": "imported-1789746468696-42",
       "name": "Srujan",
       "photo": "https://lh3.googleusercontent.com/d/1OBl16T1KlkV17qfT6nsgqMm23Q7SGu3X=w1000",
       "rollNumber": "23A81A0506",
@@ -761,7 +756,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-43",
+      "id": "imported-1789746468696-43",
       "name": "Simhadri",
       "photo": "https://lh3.googleusercontent.com/d/1rkPdVx6doe1vUIc-mqv6kC0kN0RKv9lQ=w1000",
       "rollNumber": "26243CM026",
@@ -776,7 +771,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-44",
+      "id": "imported-1789746468697-44",
       "name": "Siripuram jagan kumar",
       "photo": "https://lh3.googleusercontent.com/d/13vxlvknDYiT-1ds6tt0KhQSsVaZGMW3l=w1000",
       "rollNumber": "52",
@@ -791,7 +786,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-45",
+      "id": "imported-1789746468697-45",
       "name": "P.krishna",
       "photo": "https://lh3.googleusercontent.com/d/1Os0g3K0K0h9kekATeCEP0_ovjIK7Qseb=w1000",
       "rollNumber": "321/CSE/2026",
@@ -806,7 +801,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-46",
+      "id": "imported-1789746468697-46",
       "name": "B.Revanth",
       "photo": "https://lh3.googleusercontent.com/d/1cpdZ3pWucqVmI32dxYIf4II4wAH-3cZK=w1000",
       "rollNumber": "24243-cm-070",
@@ -821,7 +816,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-47",
+      "id": "imported-1789746468697-47",
       "name": "Nikhil",
       "photo": "https://lh3.googleusercontent.com/d/1VNc1ygs6lHJho5L45fQdLxFgH2gOaHwl=w1000",
       "rollNumber": "26243EE063",
@@ -836,7 +831,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-48",
+      "id": "imported-1789746468697-48",
       "name": "R sai charan",
       "photo": "https://lh3.googleusercontent.com/d/1riAUbz3wWCg5zNW5QsAhWL7LAk8RxGb8=w1000",
       "rollNumber": "003",
@@ -851,7 +846,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-49",
+      "id": "imported-1789746468697-49",
       "name": "Bikkina Hemanth",
       "photo": "https://lh3.googleusercontent.com/d/1bQqjbopFoT6G1LC_JPuI42gtAu3JF9Gp=w1000",
       "rollNumber": "23A81A6173",
@@ -866,7 +861,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-50",
+      "id": "imported-1789746468698-50",
       "name": "Chandu Uppada",
       "photo": "https://lh3.googleusercontent.com/d/1zu3ipf3iwmaFl2ybMNynFQ9J8nFwUnoG=w1000",
       "rollNumber": "23a81a05j1",
@@ -881,7 +876,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-51",
+      "id": "imported-1789746468699-51",
       "name": "D bharath",
       "photo": "https://lh3.googleusercontent.com/d/1v698NSIqxeUNAuSeYtD_4PZLFFGbtI91=w1000",
       "rollNumber": "24a85a0522",
@@ -896,7 +891,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-52",
+      "id": "imported-1789746468699-52",
       "name": "Billa (9398119251)",
       "photo": "https://lh3.googleusercontent.com/d/1XwpPHMhm5hKxnMLYVD_XKBOq4YkjgNBw=w1000",
       "rollNumber": "23A81A05K9",
@@ -911,7 +906,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-53",
+      "id": "imported-1789746468699-53",
       "name": "Ch  Gowtham",
       "photo": "https://lh3.googleusercontent.com/d/1U0IQ5_aNV5pLb5s6ht8MqczMy-Z5S0HG=w1000",
       "rollNumber": "26243CM076",
@@ -926,7 +921,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167656-54",
+      "id": "imported-1789746468699-54",
       "name": "S Sai Manikanta",
       "photo": "https://lh3.googleusercontent.com/d/1IccnE4P3ebvPHkkJ6jqGmLrK37dipCuN=w1000",
       "rollNumber": "150",
@@ -941,7 +936,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167657-55",
+      "id": "imported-1789746468700-55",
       "name": "S.Venkata sai",
       "photo": "https://lh3.googleusercontent.com/d/1sbhkuGC__wVrSOx0ipny4Uo9B4ECKquK=w1000",
       "rollNumber": "24A85A6106",
@@ -956,7 +951,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167657-56",
+      "id": "imported-1789746468700-56",
       "name": "Sairam Naidu",
       "photo": "https://lh3.googleusercontent.com/d/130MBNUk3vnA_rZRDNXbojUvvnEuzbkUY=w1000",
       "rollNumber": "24A85A4303",
@@ -971,7 +966,7 @@
       "notes": "Imported from Google Sheet"
     },
     {
-      "id": "imported-1789742167657-57",
+      "id": "imported-1789746468700-57",
       "name": "S.Praveen Kumar",
       "photo": "https://lh3.googleusercontent.com/d/11FuQuym0npAdcae0yn-QPj8wz6M-_NRi=w1000",
       "rollNumber": "23A81A05B3",
@@ -984,79 +979,37 @@
       "status": "Available",
       "queueOrder": 57,
       "notes": "Imported from Google Sheet"
+    },
+    {
+      "id": "imported-1789746468700-58",
+      "name": "L. Bobby",
+      "photo": "https://lh3.googleusercontent.com/d/1lW_9-_bnx3nErt8mPmUi8vwE6M30aIpy=w1000",
+      "rollNumber": "24a85a0411",
+      "branch": "ECE",
+      "year": "4th",
+      "gender": "Male",
+      "playingType": "Doubles",
+      "skillLevel": "Intermediate",
+      "basePrice": 20,
+      "status": "Available",
+      "queueOrder": 58,
+      "notes": "Imported from Google Sheet"
     }
   ],
   "auctionState": {
     "status": "LIVE",
-    "currentPlayerId": "imported-1789742167651-4",
+    "currentPlayerId": "imported-1789746468684-2",
     "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 599,
+    "timerSeconds": 514,
     "initialTimerSeconds": 600,
-    "selectedIncrement": 50,
+    "selectedIncrement": 20,
     "isSoundEnabled": true,
     "bidHistory": [],
     "currentRound": 1,
-    "lastAction": "Auction started for Kavuru Bala Siva at 20 coins"
+    "lastAction": "Auction started for padala kowshik at 20 coins"
   },
-  "bids": [
-    {
-      "id": "bid-1789743052436-bwyr",
-      "playerId": "imported-1789742167651-2",
-      "playerName": "padala kowshik",
-      "teamId": "team-1",
-      "teamName": "Shuttle Trouble",
-      "teamColor": "#f59e0b",
-      "amount": 190,
-      "timestamp": "08:20:52 pm",
-      "adminUser": "Admin"
-    },
-    {
-      "id": "bid-1789743052063-wknk",
-      "playerId": "imported-1789742167651-2",
-      "playerName": "padala kowshik",
-      "teamId": "team-1788945552104",
-      "teamName": "Juggernauts",
-      "teamColor": "#6366f1",
-      "amount": 160,
-      "timestamp": "08:20:52 pm",
-      "adminUser": "Admin"
-    },
-    {
-      "id": "bid-1789743007158-0q3i",
-      "playerId": "imported-1789742167651-2",
-      "playerName": "padala kowshik",
-      "teamId": "team-5",
-      "teamName": "ShuttleStorm",
-      "teamColor": "#ec4899",
-      "amount": 140,
-      "timestamp": "08:20:07 pm",
-      "adminUser": "Admin"
-    },
-    {
-      "id": "bid-1789743003494-m8ij",
-      "playerId": "imported-1789742167651-2",
-      "playerName": "padala kowshik",
-      "teamId": "team-1",
-      "teamName": "Shuttle Trouble",
-      "teamColor": "#f59e0b",
-      "amount": 120,
-      "timestamp": "08:20:03 pm",
-      "adminUser": "Admin"
-    }
-  ],
-  "auctionHistory": [
-    {
-      "id": "history-1789743092667",
-      "playerId": "imported-1789742167651-2",
-      "playerName": "padala kowshik",
-      "teamId": "team-1",
-      "teamName": "Shuttle Trouble",
-      "finalPrice": 190,
-      "status": "Sold",
-      "timestamp": "08:21 pm",
-      "totalBids": 4
-    }
-  ]
+  "bids": [],
+  "auctionHistory": []
 }
