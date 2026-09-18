@@ -4,14 +4,14 @@
     "subtitle": "Live Player Auction • Hostel Day Celebration",
     "currency": "coins",
     "defaultBasePrice": 20,
-    "auctionTimer": 600,
+    "auctionTimer": 30,
     "bidIncrements": [
       10,
       20,
       50,
       100
     ],
-    "minSquadSize": 6,
+    "minSquadSize": 4,
     "maxSquadSize": 8,
     "soundEnabled": true
   },
@@ -121,136 +121,19 @@
       "players": []
     }
   ],
-  "players": [
-    {
-      "id": "imported-1789373220969-1",
-      "name": "sai",
-      "photo": "https://lh3.googleusercontent.com/d/1Fu1pS7eOkreqKxK18yLC8ZgWdzjm2kWk=w1000",
-      "rollNumber": "24a85a4304",
-      "branch": "CSE",
-      "year": "3rd",
-      "gender": "Male",
-      "playingType": "Doubles",
-      "skillLevel": "Beginner",
-      "basePrice": 20,
-      "status": "Available",
-      "queueOrder": 1,
-      "notes": "Imported from Google Sheet",
-      "round": 1
-    },
-    {
-      "id": "imported-1789373220969-2",
-      "name": "Hemanth",
-      "photo": "https://lh3.googleusercontent.com/d/1JhKfN2IIMUJlSvbs_QKE6zdVQRrCzwZm=w1000",
-      "rollNumber": "24a85a0516",
-      "branch": "CSE",
-      "year": "4th",
-      "gender": "Male",
-      "playingType": "Both",
-      "skillLevel": "Intermediate",
-      "basePrice": 20,
-      "status": "Available",
-      "queueOrder": 2,
-      "notes": "Imported from Google Sheet",
-      "round": 1
-    },
-    {
-      "id": "imported-1789373220970-3",
-      "name": "Masina Bala Sai Rama Krishna",
-      "photo": "https://lh3.googleusercontent.com/d/1wLxPmSx-wrcNjfpFLX0J-Ibdm7DSYy1R=w1000",
-      "rollNumber": "24A85A4304",
-      "branch": "CAI",
-      "year": "4th",
-      "gender": "Male",
-      "playingType": "Both",
-      "skillLevel": "Intermediate",
-      "basePrice": 20,
-      "status": "Live",
-      "queueOrder": 3,
-      "notes": "Imported from Google Sheet",
-      "round": 1
-    },
-    {
-      "id": "imported-1789373220970-4",
-      "name": "ADAPA govind varma",
-      "photo": "https://lh3.googleusercontent.com/d/19yfgkJGfpnA5Mc3EbdhKiX0bYqCOg1VK=w1000",
-      "rollNumber": "HOSTEL-103",
-      "branch": "CAI",
-      "year": "4th",
-      "gender": "Male",
-      "playingType": "Singles",
-      "skillLevel": "Beginner",
-      "basePrice": 20,
-      "status": "Available",
-      "queueOrder": 4,
-      "notes": "Imported from Google Sheet",
-      "round": 1
-    },
-    {
-      "id": "imported-1789373220971-5",
-      "name": "Phani",
-      "photo": "https://lh3.googleusercontent.com/d/18ou5K-aUJjUPv3oNv8ltGRqEADZX2aU6=w1000",
-      "rollNumber": "24a85a6102",
-      "branch": "AIML",
-      "year": "4th",
-      "gender": "Male",
-      "playingType": "Both",
-      "skillLevel": "Advanced",
-      "basePrice": 20,
-      "status": "Available",
-      "queueOrder": 5,
-      "notes": "Imported from Google Sheet",
-      "round": 1
-    }
-  ],
+  "players": [],
   "auctionState": {
-    "status": "LIVE",
-    "currentPlayerId": "imported-1789373220970-3",
-    "currentBid": 20,
+    "status": "IDLE",
+    "currentPlayerId": null,
+    "currentBid": 0,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 589,
-    "initialTimerSeconds": 600,
-    "selectedIncrement": 10,
+    "timerSeconds": 30,
+    "initialTimerSeconds": 30,
+    "selectedIncrement": 20,
     "isSoundEnabled": true,
-    "bidHistory": [],
-    "currentRound": 1,
-    "lastAction": "Auction started for Masina Bala Sai Rama Krishna at 20 coins"
+    "bidHistory": []
   },
-  "bids": [
-    {
-      "id": "bid-1789706159239-wcyx",
-      "playerId": "imported-1789373220970-3",
-      "playerName": "Masina Bala Sai Rama Krishna",
-      "teamId": "team-2",
-      "teamName": "Court Crushers",
-      "teamColor": "#10b981",
-      "amount": 20,
-      "timestamp": "10:05:59 am",
-      "adminUser": "Admin"
-    },
-    {
-      "id": "bid-1789373258753-h55u",
-      "playerId": "imported-1789373220969-1",
-      "playerName": "sai",
-      "teamId": "team-4",
-      "teamName": "AERO VEX",
-      "teamColor": "#06b6d4",
-      "amount": 40,
-      "timestamp": "01:37:38 pm",
-      "adminUser": "Admin"
-    },
-    {
-      "id": "bid-1789373257399-93dq",
-      "playerId": "imported-1789373220969-1",
-      "playerName": "sai",
-      "teamId": "team-3",
-      "teamName": "Team Phonix",
-      "teamColor": "#8b5cf6",
-      "amount": 20,
-      "timestamp": "01:37:37 pm",
-      "adminUser": "Admin"
-    }
-  ],
+  "bids": [],
   "auctionHistory": []
 }

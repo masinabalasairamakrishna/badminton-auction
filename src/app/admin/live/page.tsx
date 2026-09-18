@@ -24,6 +24,7 @@ import {
   ArrowRight,
   Sparkles,
   Lock,
+  Camera,
 } from "lucide-react";
 import { DatabaseSchema, Player, Team, Bid, AuctionState, UserSession, UserRole } from "@/types";
 import { soundManager } from "@/lib/audio";
@@ -824,6 +825,48 @@ export default function LiveAuctionPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Quick Admin Photo Upload Button */}
+              {role === "admin" && currentPlayer && (
+                <label
+                  className="absolute top-1.5 right-1.5 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition shadow-md z-10"
+                  title="Upload / Replace player photo directly from device"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const fd = new FormData();
+                      fd.append("file", file);
+                      fd.append("playerId", currentPlayer.id);
+                      try {
+                        const res = await fetch("/api/upload", { method: "POST", body: fd });
+                        const json = await res.json();
+                        if (json.success && json.photoUrl) {
+                          success(`Photo updated for ${currentPlayer.name}!`);
+                          setDb((prev) => {
+                            if (!prev) return prev;
+                            return {
+                              ...prev,
+                              players: prev.players.map((p) =>
+                                p.id === currentPlayer.id ? { ...p, photo: json.photoUrl } : p
+                              ),
+                            };
+                          });
+                        } else {
+                          error(json.message || "Upload failed");
+                        }
+                      } catch {
+                        error("Error uploading photo");
+                      }
+                    }}
+                  />
+                </label>
+              )}
 
               {/* Status flag on photo */}
               {currentPlayer && (
