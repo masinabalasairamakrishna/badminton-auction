@@ -25,6 +25,8 @@ import {
   Sparkles,
   Lock,
   Camera,
+  Users,
+  Download,
 } from "lucide-react";
 import { DatabaseSchema, Player, Team, Bid, AuctionState, UserSession, UserRole } from "@/types";
 import { soundManager } from "@/lib/audio";
@@ -32,6 +34,8 @@ import { useToast } from "@/components/Toast";
 import SoldCelebrationModal from "@/components/SoldCelebrationModal";
 import PlayerCardModal from "@/components/PlayerCardModal";
 import RulesModal from "@/components/RulesModal";
+import CaptainSquadModal from "@/components/CaptainSquadModal";
+import { downloadTeamSquadCSV } from "@/lib/exportUtils";
 import { formatCurrency } from "@/lib/utils";
 
 export default function LiveAuctionPage() {
@@ -43,6 +47,7 @@ export default function LiveAuctionPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedPlayerForModal, setSelectedPlayerForModal] = useState<Player | null>(null);
   const [rulesModalOpen, setRulesModalOpen] = useState(false);
+  const [squadModalOpen, setSquadModalOpen] = useState(false);
 
   // Captain controlled increment state
   const [captainIncrement, setCaptainIncrement] = useState<number>(20);
@@ -532,6 +537,14 @@ export default function LiveAuctionPage() {
                   {currentUser.teamName}
                 </span>
               </div>
+              <button
+                onClick={() => setSquadModalOpen(true)}
+                className="px-2.5 py-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 transition flex items-center gap-1"
+                title="View & Download My Squad of Sold Players"
+              >
+                <Users className="w-3 h-3" />
+                <span>Squad ({players.filter((p) => p.soldTo === currentUser?.teamId).length})</span>
+              </button>
               <Link
                 href="/login"
                 className="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-slate-300 transition"
@@ -1021,8 +1034,34 @@ export default function LiveAuctionPage() {
                     <div className="text-right">
                       <span className="text-[9px] text-slate-400 uppercase font-semibold block">Squad</span>
                       <span className="text-xs font-mono font-black text-slate-200">
-                        {captainTeam.players.length}
+                        {players.filter((p) => p.soldTo === captainTeam.id).length} / 8
                       </span>
+                    </div>
+
+                    {/* Captain Squad Action Buttons */}
+                    <div className="flex items-center gap-1.5 pl-2 border-l border-slate-700/60">
+                      <button
+                        type="button"
+                        onClick={() => setSquadModalOpen(true)}
+                        className="px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-[11px] font-bold transition flex items-center gap-1"
+                        title="View acquired squad"
+                      >
+                        <Users className="w-3 h-3 text-emerald-400" />
+                        <span>My Squad</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const squad = players.filter((p) => p.soldTo === captainTeam.id);
+                          downloadTeamSquadCSV(captainTeam, squad, currency);
+                        }}
+                        disabled={players.filter((p) => p.soldTo === captainTeam.id).length === 0}
+                        className="px-2.5 py-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-[11px] font-black transition flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                        title="Download sold players as CSV file"
+                      >
+                        <Download className="w-3 h-3 text-emerald-400" />
+                        <span>Download</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1425,6 +1464,15 @@ export default function LiveAuctionPage() {
       <RulesModal
         isOpen={rulesModalOpen}
         onClose={() => setRulesModalOpen(false)}
+      />
+
+      {/* Captain Acquired Squad Modal */}
+      <CaptainSquadModal
+        isOpen={squadModalOpen}
+        onClose={() => setSquadModalOpen(false)}
+        team={captainTeam || null}
+        players={players}
+        currency={currency}
       />
     </div>
   );

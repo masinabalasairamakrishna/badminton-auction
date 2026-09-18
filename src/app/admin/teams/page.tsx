@@ -12,12 +12,14 @@ import {
   Eye,
   CheckCircle2,
   X,
+  Download,
 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Team, Player, DatabaseSchema } from "@/types";
 import { useToast } from "@/components/Toast";
 import { formatCurrency } from "@/lib/utils";
 import PlayerAvatar from "@/components/PlayerAvatar";
+import { downloadTeamSquadCSV } from "@/lib/exportUtils";
 
 export default function TeamsManagementPage() {
   const { success, error } = useToast();
@@ -373,24 +375,39 @@ export default function TeamsManagementPage() {
             </button>
 
             {/* Squad Header */}
-            <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-slate-800">
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl border border-slate-700 bg-slate-950"
-                style={{ borderColor: selectedSquadTeam.color }}
-              >
-                {selectedSquadTeam.logo || "🏸"}
-              </div>
-              <div>
-                <h2
-                  className="text-2xl font-black text-white"
-                  style={{ color: selectedSquadTeam.color }}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-6 pb-4 border-b border-slate-800 pr-10">
+              <div className="flex items-center gap-3.5">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl border border-slate-700 bg-slate-950 flex-shrink-0"
+                  style={{ borderColor: selectedSquadTeam.color }}
                 >
-                  {selectedSquadTeam.name} Squad
-                </h2>
-                <p className="text-xs text-slate-400">
-                  Captain: <span className="text-slate-200 font-semibold">{selectedSquadTeam.captain}</span> • Remaining Budget: <span className="text-emerald-400 font-mono font-bold">{formatCurrency(selectedSquadTeam.remainingBudget, currency)}</span>
-                </p>
+                  {selectedSquadTeam.logo || "🏸"}
+                </div>
+                <div>
+                  <h2
+                    className="text-2xl font-black text-white"
+                    style={{ color: selectedSquadTeam.color }}
+                  >
+                    {selectedSquadTeam.name} Squad
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Captain: <span className="text-slate-200 font-semibold">{selectedSquadTeam.captain}</span> • Remaining Budget: <span className="text-emerald-400 font-mono font-bold">{formatCurrency(selectedSquadTeam.remainingBudget, currency)}</span>
+                  </p>
+                </div>
               </div>
+
+              <button
+                onClick={() => {
+                  const squadPlayers = players.filter((p) => p.soldTo === selectedSquadTeam.id);
+                  downloadTeamSquadCSV(selectedSquadTeam, squadPlayers, currency);
+                }}
+                disabled={players.filter((p) => p.soldTo === selectedSquadTeam.id).length === 0}
+                className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center gap-1.5 shadow-md shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+                title="Download squad roster as CSV"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Sold Players</span>
+              </button>
             </div>
 
             {/* Roster List */}
