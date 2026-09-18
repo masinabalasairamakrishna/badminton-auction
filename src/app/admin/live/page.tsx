@@ -1054,8 +1054,14 @@ export default function LiveAuctionPage() {
                       <span
                         className="text-base font-black tracking-wide block truncate"
                         style={{ color: highestTeam.color || "#f59e0b" }}
+                        title={`${highestTeam.name} (${highestTeam.captain})`}
                       >
                         {highestTeam.name}
+                        {highestTeam.captain ? (
+                          <span className="text-slate-300 font-bold ml-1.5 text-xs">
+                            ({highestTeam.captain})
+                          </span>
+                        ) : null}
                       </span>
                       <span className="text-[11px] text-slate-400 font-semibold block">
                         Purse Remaining: {formatCurrency(highestTeam.remainingBudget, currency)}
@@ -1111,30 +1117,40 @@ export default function LiveAuctionPage() {
                     Waiting for first bid...
                   </div>
                 ) : (
-                  auctionState.bidHistory.map((bid, idx) => (
-                    <div
-                      key={bid.id}
-                      className={`flex items-center justify-between p-1.5 rounded-lg text-[11px] transition animate-in fade-in slide-in-from-top-2 ${
-                        idx === 0
-                          ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-100 font-bold"
-                          : "bg-slate-900/60 border border-slate-800/70 text-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 truncate">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: bid.teamColor || "#10b981" }}
-                        />
-                        <span className="truncate">{bid.teamName}</span>
+                  auctionState.bidHistory.map((bid, idx) => {
+                    const bidTeam = teams.find((x) => x.id === bid.teamId);
+                    return (
+                      <div
+                        key={bid.id}
+                        className={`flex items-center justify-between p-1.5 rounded-lg text-[11px] transition animate-in fade-in slide-in-from-top-2 ${
+                          idx === 0
+                            ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-100 font-bold"
+                            : "bg-slate-900/60 border border-slate-800/70 text-slate-300"
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: bid.teamColor || "#10b981" }}
+                          />
+                          <span className="truncate">
+                            {bid.teamName}
+                            {bidTeam?.captain ? (
+                              <span className="text-slate-400 text-[10px] ml-1">
+                                ({bidTeam.captain})
+                              </span>
+                            ) : null}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                          <span className="font-mono font-black text-amber-400">
+                            {formatCurrency(bid.amount, currency)}
+                          </span>
+                          <span className="text-[9px] text-slate-500">{bid.timestamp}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1.5 flex-shrink-0 ml-1">
-                        <span className="font-mono font-black text-amber-400">
-                          {formatCurrency(bid.amount, currency)}
-                        </span>
-                        <span className="text-[9px] text-slate-500">{bid.timestamp}</span>
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </div>
@@ -1175,21 +1191,26 @@ export default function LiveAuctionPage() {
                 }`}
               >
                 <div>
-                  {/* Team Logo & Name */}
+                  {/* Team Logo & Name with Captain */}
                   <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-1.5 min-w-0">
+                    <div className="flex items-center gap-1 min-w-0 flex-1 mr-1">
                       <span className="text-base flex-shrink-0">{team.logo || "🏸"}</span>
                       <span
-                        className="text-[11px] font-black truncate"
+                        className="text-[11px] font-black truncate block"
                         style={{ color: team.color || "#ffffff" }}
-                        title={team.name}
+                        title={`${team.name} (Capt. ${team.captain})`}
                       >
                         {team.name}
+                        {team.captain ? (
+                          <span className="text-slate-300 font-bold ml-1 text-[10px]">
+                            ({team.captain})
+                          </span>
+                        ) : null}
                       </span>
                     </div>
 
                     {isHighest && (
-                      <span className="text-[9px] px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black uppercase tracking-wider flex-shrink-0 ml-1">
+                      <span className="text-[9px] px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black uppercase tracking-wider flex-shrink-0">
                         LEAD
                       </span>
                     )}
@@ -1278,7 +1299,7 @@ export default function LiveAuctionPage() {
                   </div>
                 ) : (
                   <div className="w-full py-1 text-center text-[9px] font-bold text-slate-400 uppercase tracking-wider bg-slate-900/60 rounded-lg border border-slate-800 truncate">
-                    {isHighest ? "Leader" : "Franchise"}
+                    {isHighest ? "Leader" : team.captain ? `Capt. ${team.captain}` : "Franchise"}
                   </div>
                 )}
               </div>
