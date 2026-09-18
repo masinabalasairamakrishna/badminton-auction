@@ -39,6 +39,13 @@ export default async function HomePage() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/rules"
+            className="px-3.5 py-2 rounded-xl text-xs md:text-sm font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition flex items-center gap-1.5"
+          >
+            <span>📜</span>
+            <span>Rules</span>
+          </Link>
+          <Link
             href="/login"
             className="px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700/80 hover:bg-slate-800 transition"
           >
@@ -77,7 +84,7 @@ export default async function HomePage() {
         </h1>
 
         <p className="max-w-2xl text-base sm:text-lg text-slate-300 mb-10 leading-relaxed">
-          The ultimate college hostel badminton showdown. 6 powerhouse teams, fierce bidding battles, and full real-time stadium broadcast on the big screen!
+          The ultimate college hostel badminton showdown. 8 powerhouse teams, fierce bidding battles, and full real-time stadium broadcast on the big screen!
         </p>
 
         {/* Primary Action Buttons */}
@@ -92,11 +99,19 @@ export default async function HomePage() {
           </Link>
 
           <Link
-            href="/login"
-            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-800/90 hover:bg-slate-800 text-white font-bold text-lg border border-slate-700/90 transition flex items-center justify-center gap-2 shadow-xl"
+            href="/rules"
+            className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 font-black text-lg border border-amber-500/30 transition flex items-center justify-center gap-2 shadow-xl"
           >
-            <ShieldCheck className="w-5 h-5 text-amber-400" />
-            <span>ADMIN CONSOLE</span>
+            <span>📜</span>
+            <span>OFFICIAL RULES</span>
+          </Link>
+
+          <Link
+            href="/login"
+            className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-slate-800/90 hover:bg-slate-800 text-white font-bold text-lg border border-slate-700/90 transition flex items-center justify-center gap-2 shadow-xl"
+          >
+            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <span>LOGIN</span>
           </Link>
         </div>
 

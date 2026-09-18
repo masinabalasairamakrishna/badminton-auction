@@ -165,7 +165,7 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Available",
+      "status": "Live",
       "queueOrder": 3,
       "notes": "Imported from Google Sheet",
       "round": 1
@@ -181,7 +181,7 @@
       "playingType": "Singles",
       "skillLevel": "Beginner",
       "basePrice": 20,
-      "status": "Live",
+      "status": "Available",
       "queueOrder": 4,
       "notes": "Imported from Google Sheet",
       "round": 1
@@ -205,17 +205,17 @@
   ],
   "auctionState": {
     "status": "LIVE",
-    "currentPlayerId": "imported-1789373220970-4",
+    "currentPlayerId": "imported-1789373220970-3",
     "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 524,
+    "timerSeconds": 589,
     "initialTimerSeconds": 600,
     "selectedIncrement": 10,
     "isSoundEnabled": true,
     "bidHistory": [],
     "currentRound": 1,
-    "lastAction": "Auction started for ADAPA govind varma at 20 coins"
+    "lastAction": "Auction started for Masina Bala Sai Rama Krishna at 20 coins"
   },
   "bids": [
     {

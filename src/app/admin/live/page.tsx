@@ -30,6 +30,7 @@ import { soundManager } from "@/lib/audio";
 import { useToast } from "@/components/Toast";
 import SoldCelebrationModal from "@/components/SoldCelebrationModal";
 import PlayerCardModal from "@/components/PlayerCardModal";
+import RulesModal from "@/components/RulesModal";
 import { formatCurrency } from "@/lib/utils";
 
 export default function LiveAuctionPage() {
@@ -40,6 +41,7 @@ export default function LiveAuctionPage() {
   const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedPlayerForModal, setSelectedPlayerForModal] = useState<Player | null>(null);
+  const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
   // Captain controlled increment state
   const [captainIncrement, setCaptainIncrement] = useState<number>(20);
@@ -485,6 +487,16 @@ export default function LiveAuctionPage() {
             title={soundOn ? "Mute sound" : "Enable sound"}
           >
             {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+          </button>
+
+          {/* Official Tournament Rules Button */}
+          <button
+            onClick={() => setRulesModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-black transition shadow-sm"
+            title="Official Tournament Rules (ANVAYA 2K26)"
+          >
+            <span>📜</span>
+            <span className="font-extrabold text-[11px] sm:text-xs">Rules</span>
           </button>
 
           {/* Projector Fullscreen Mode */}
@@ -1364,6 +1376,12 @@ export default function LiveAuctionPage() {
         isAdmin={role === "admin"}
         onClose={() => setSelectedPlayerForModal(null)}
         onStartAuction={(p) => handleStartAuction(p.id)}
+      />
+
+      {/* Official Tournament Rules Modal */}
+      <RulesModal
+        isOpen={rulesModalOpen}
+        onClose={() => setRulesModalOpen(false)}
       />
     </div>
   );
