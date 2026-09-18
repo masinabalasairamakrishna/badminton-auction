@@ -25,9 +25,11 @@
       "username": "hemanth",
       "passcode": "hemanth2026",
       "initialBudget": 1000,
-      "remainingBudget": 1000,
-      "spent": 0,
-      "players": []
+      "remainingBudget": 810,
+      "spent": 190,
+      "players": [
+        "imported-1789742167651-2"
+      ]
     },
     {
       "id": "team-2",
@@ -148,9 +150,13 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Available",
+      "status": "Sold",
       "queueOrder": 2,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1,
+      "soldTo": "team-1",
+      "soldToTeamName": "Shuttle Trouble",
+      "finalPrice": 190
     },
     {
       "id": "imported-1789742167651-3",
@@ -163,9 +169,10 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Available",
+      "status": "Live",
       "queueOrder": 3,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1
     },
     {
       "id": "imported-1789742167651-4",
@@ -979,17 +986,76 @@
     }
   ],
   "auctionState": {
-    "status": "IDLE",
-    "currentPlayerId": null,
-    "currentBid": 0,
+    "status": "LIVE",
+    "currentPlayerId": "imported-1789742167651-3",
+    "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 30,
-    "initialTimerSeconds": 30,
-    "selectedIncrement": 20,
+    "timerSeconds": 474,
+    "initialTimerSeconds": 600,
+    "selectedIncrement": 50,
     "isSoundEnabled": true,
-    "bidHistory": []
+    "bidHistory": [],
+    "currentRound": 1,
+    "lastAction": "Auction started for Kowshik K at 20 coins"
   },
-  "bids": [],
-  "auctionHistory": []
+  "bids": [
+    {
+      "id": "bid-1789743052436-bwyr",
+      "playerId": "imported-1789742167651-2",
+      "playerName": "padala kowshik",
+      "teamId": "team-1",
+      "teamName": "Shuttle Trouble",
+      "teamColor": "#f59e0b",
+      "amount": 190,
+      "timestamp": "08:20:52 pm",
+      "adminUser": "Admin"
+    },
+    {
+      "id": "bid-1789743052063-wknk",
+      "playerId": "imported-1789742167651-2",
+      "playerName": "padala kowshik",
+      "teamId": "team-1788945552104",
+      "teamName": "Juggernauts",
+      "teamColor": "#6366f1",
+      "amount": 160,
+      "timestamp": "08:20:52 pm",
+      "adminUser": "Admin"
+    },
+    {
+      "id": "bid-1789743007158-0q3i",
+      "playerId": "imported-1789742167651-2",
+      "playerName": "padala kowshik",
+      "teamId": "team-5",
+      "teamName": "ShuttleStorm",
+      "teamColor": "#ec4899",
+      "amount": 140,
+      "timestamp": "08:20:07 pm",
+      "adminUser": "Admin"
+    },
+    {
+      "id": "bid-1789743003494-m8ij",
+      "playerId": "imported-1789742167651-2",
+      "playerName": "padala kowshik",
+      "teamId": "team-1",
+      "teamName": "Shuttle Trouble",
+      "teamColor": "#f59e0b",
+      "amount": 120,
+      "timestamp": "08:20:03 pm",
+      "adminUser": "Admin"
+    }
+  ],
+  "auctionHistory": [
+    {
+      "id": "history-1789743092667",
+      "playerId": "imported-1789742167651-2",
+      "playerName": "padala kowshik",
+      "teamId": "team-1",
+      "teamName": "Shuttle Trouble",
+      "finalPrice": 190,
+      "status": "Sold",
+      "timestamp": "08:21 pm",
+      "totalBids": 4
+    }
+  ]
 }

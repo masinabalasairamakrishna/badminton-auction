@@ -7,3 +7,5 @@ cloudflared.exe
 .env*.local
 .DS_Store
 *.tsbuildinfo
+powershell.bat
+public/uploads/cache

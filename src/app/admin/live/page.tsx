@@ -36,7 +36,7 @@ import PlayerCardModal from "@/components/PlayerCardModal";
 import RulesModal from "@/components/RulesModal";
 import CaptainSquadModal from "@/components/CaptainSquadModal";
 import { downloadTeamSquadCSV } from "@/lib/exportUtils";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, resolvePlayerPhoto } from "@/lib/utils";
 
 export default function LiveAuctionPage() {
   const { toast, success, error, info } = useToast();
@@ -694,7 +694,7 @@ export default function LiveAuctionPage() {
                     <div className="w-7 h-7 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
                       {nextPlayer.photo ? (
                         <img
-                          src={nextPlayer.photo}
+                          src={resolvePlayerPhoto(nextPlayer.photo) || nextPlayer.photo}
                           alt={nextPlayer.name}
                           referrerPolicy="no-referrer"
                           onError={(e) => {
@@ -817,7 +817,7 @@ export default function LiveAuctionPage() {
               >
                 {currentPlayer?.photo ? (
                   <img
-                    src={currentPlayer.photo}
+                    src={resolvePlayerPhoto(currentPlayer.photo) || currentPlayer.photo}
                     alt={currentPlayer.name}
                     referrerPolicy="no-referrer"
                     onError={(e) => {

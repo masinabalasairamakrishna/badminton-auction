@@ -5,7 +5,7 @@ import confetti from "canvas-confetti";
 import { Award, ArrowRight, X } from "lucide-react";
 import { soundManager } from "@/lib/audio";
 import { Player, Team } from "@/types";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, resolvePlayerPhoto } from "@/lib/utils";
 
 interface SoldModalProps {
   isOpen: boolean;
@@ -91,7 +91,7 @@ export default function SoldCelebrationModal({
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-amber-400 shadow-2xl bg-slate-800">
               {player.photo ? (
                 <img
-                  src={player.photo}
+                  src={resolvePlayerPhoto(player.photo) || player.photo}
                   alt={player.name}
                   referrerPolicy="no-referrer"
                   onError={(e) => {

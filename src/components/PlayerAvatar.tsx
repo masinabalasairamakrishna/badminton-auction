@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Camera, Loader2 } from "lucide-react";
+import { resolvePlayerPhoto } from "@/lib/utils";
 
 interface PlayerAvatarProps {
   photo?: string | null;
@@ -87,7 +88,7 @@ export default function PlayerAvatar({
     >
       {photo && !hasError ? (
         <img
-          src={photo}
+          src={resolvePlayerPhoto(photo) || photo}
           alt={name}
           referrerPolicy="no-referrer"
           onError={() => setHasError(true)}
