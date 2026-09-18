@@ -110,21 +110,26 @@ export default function PlayerAvatar({
 
       {/* Editable Hover Overlay */}
       {editable && !isUploading && (
-        <label
-          className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-200 z-10 text-white"
-          title="Upload or change player photo"
-        >
-          <Camera className={size === "sm" ? "w-3.5 h-3.5 text-emerald-400" : "w-6 h-6 text-emerald-400"} />
-          <span className={size === "sm" ? "text-[8px] font-bold mt-0.5" : "text-xs font-bold mt-1"}>
-            Upload
-          </span>
-          <input
-            type="file"
-            accept="image/png, image/jpeg, image/webp"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </label>
+        <>
+          <label
+            className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 active:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-200 z-10 text-white"
+            title="Upload or change player photo"
+          >
+            <Camera className={size === "sm" ? "w-3.5 h-3.5 text-emerald-400" : "w-6 h-6 text-emerald-400"} />
+            <span className={size === "sm" ? "text-[8px] font-bold mt-0.5" : "text-xs font-bold mt-1"}>
+              Upload
+            </span>
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </label>
+          <div className="sm:hidden absolute bottom-0.5 right-0.5 p-0.5 bg-slate-900/90 text-emerald-400 rounded-full border border-slate-700 pointer-events-none z-5 shadow-sm">
+            <Camera className="w-2.5 h-2.5" />
+          </div>
+        </>
       )}
     </div>
   );

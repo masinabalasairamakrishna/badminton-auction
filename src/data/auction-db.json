@@ -86,7 +86,7 @@
       "name": "Hit & Run",
       "logo": "🏆",
       "color": "#3b82f6",
-      "captain": "Surya",
+      "captain": "Suriiii",
       "username": "surya",
       "passcode": "surya2026",
       "initialBudget": 1000,
@@ -149,7 +149,7 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Live",
+      "status": "Available",
       "queueOrder": 2,
       "notes": "Imported from Google Sheet",
       "round": 1
@@ -165,7 +165,7 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Available",
+      "status": "Live",
       "queueOrder": 3,
       "notes": "Imported from Google Sheet",
       "round": 1
@@ -183,7 +183,8 @@
       "basePrice": 20,
       "status": "Available",
       "queueOrder": 4,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1
     },
     {
       "id": "imported-1789746468687-5",
@@ -993,22 +994,23 @@
       "basePrice": 20,
       "status": "Available",
       "queueOrder": 58,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1
     }
   ],
   "auctionState": {
     "status": "LIVE",
-    "currentPlayerId": "imported-1789746468684-2",
+    "currentPlayerId": "imported-1789746468685-3",
     "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 514,
+    "timerSeconds": 564,
     "initialTimerSeconds": 600,
     "selectedIncrement": 20,
     "isSoundEnabled": true,
     "bidHistory": [],
     "currentRound": 1,
-    "lastAction": "Auction started for padala kowshik at 20 coins"
+    "lastAction": "Auction started for Kowshik K at 20 coins"
   },
   "bids": [],
   "auctionHistory": []

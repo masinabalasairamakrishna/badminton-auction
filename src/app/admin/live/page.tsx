@@ -852,8 +852,8 @@ export default function LiveAuctionPage() {
                 </div>
               </div>
 
-              {/* Quick Admin Photo Upload Button */}
-              {role === "admin" && currentPlayer && (
+              {/* Quick Admin / Captain Photo Upload Button */}
+              {(role === "admin" || role === "captain") && currentPlayer && (
                 <label
                   className="absolute top-2 right-2 p-2 rounded-xl bg-slate-900/90 hover:bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition shadow-xl z-20"
                   title="Upload / Replace player photo directly from device"
@@ -1492,7 +1492,7 @@ export default function LiveAuctionPage() {
         teams={teams}
         bids={db.bids}
         currency={currency}
-        isAdmin={role === "admin"}
+        isAdmin={role === "admin" || role === "captain"}
         onClose={() => setSelectedPlayerForModal(null)}
         onStartAuction={(p) => handleStartAuction(p.id)}
       />
@@ -1510,6 +1510,17 @@ export default function LiveAuctionPage() {
         team={captainTeam || null}
         players={players}
         currency={currency}
+        onPhotoUpdated={(playerId, newUrl) => {
+          setDb((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              players: prev.players.map((p) =>
+                p.id === playerId ? { ...p, photo: newUrl } : p
+              ),
+            };
+          });
+        }}
       />
     </div>
   );

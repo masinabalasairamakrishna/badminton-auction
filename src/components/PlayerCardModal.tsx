@@ -53,8 +53,11 @@ export default function PlayerCardModal({
             photo={player.photo}
             name={player.name}
             size="lg"
-            editable={isAdmin}
+            editable={true}
             playerId={player.id}
+            onPhotoUpdated={(newUrl) => {
+              player.photo = newUrl;
+            }}
           />
 
           <div className="text-center sm:text-left flex-1">

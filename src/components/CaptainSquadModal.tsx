@@ -13,6 +13,7 @@ interface CaptainSquadModalProps {
   team: Team | null;
   players?: Player[];
   currency?: string;
+  onPhotoUpdated?: (playerId: string, newUrl: string) => void;
 }
 
 export default function CaptainSquadModal({
@@ -21,6 +22,7 @@ export default function CaptainSquadModal({
   team,
   players = [],
   currency = "coins",
+  onPhotoUpdated,
 }: CaptainSquadModalProps) {
   if (!isOpen || !team) return null;
 
@@ -141,7 +143,13 @@ export default function CaptainSquadModal({
                   <PlayerAvatar
                     photo={player.photo}
                     name={player.name}
-                    size="sm"
+                    size="md"
+                    editable={true}
+                    playerId={player.id}
+                    onPhotoUpdated={(newUrl) => {
+                      player.photo = newUrl;
+                      if (onPhotoUpdated) onPhotoUpdated(player.id, newUrl);
+                    }}
                     className="flex-shrink-0"
                   />
                   <div className="min-w-0">
