@@ -32,10 +32,10 @@ export default function PlayerAvatar({
   }, [photo]);
 
   const sizeClasses = {
-    sm: "w-9 h-9 rounded-xl text-xs",
-    md: "w-12 h-12 rounded-2xl text-sm",
-    lg: "w-24 h-24 rounded-3xl text-2xl",
-    xl: "w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-3xl text-4xl",
+    sm: "w-10 h-10 sm:w-11 sm:h-11 rounded-xl text-xs",
+    md: "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl text-base",
+    lg: "w-28 h-28 sm:w-36 sm:h-36 rounded-3xl text-3xl",
+    xl: "w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-3xl text-5xl",
   }[size];
 
   const initials = (name || "Player")

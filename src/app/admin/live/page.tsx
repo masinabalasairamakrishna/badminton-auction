@@ -413,6 +413,19 @@ export default function LiveAuctionPage() {
   const initialSec = auctionState.initialTimerSeconds || 30;
   const timerPercent = Math.max(0, Math.min(100, (timerSec / initialSec) * 100));
 
+  // Dynamic responsive player photo sizing optimized for Admin, Captain, and Big-Screen Projector Spectator
+  const photoContainerClass = isFullscreen
+    ? role === "viewer"
+      ? "w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[420px] lg:h-[420px] xl:w-[480px] xl:h-[480px] max-h-[50vh]"
+      : role === "admin"
+      ? "w-56 h-56 sm:w-68 sm:h-68 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[420px] xl:h-[420px] max-h-[43vh]"
+      : "w-48 h-48 sm:w-56 sm:h-56 md:w-68 md:h-68 lg:w-76 lg:h-76 xl:w-84 xl:h-84 max-h-[34vh]"
+    : role === "viewer"
+    ? "w-56 h-56 sm:w-64 sm:h-64 md:w-76 md:h-76 lg:w-88 lg:h-88 xl:w-[380px] xl:h-[380px] 2xl:w-[440px] 2xl:h-[440px] max-h-[44vh]"
+    : role === "admin"
+    ? "w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-88 2xl:h-88 max-h-[35vh] sm:max-h-[37vh]"
+    : "w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-60 lg:h-60 xl:w-68 xl:h-68 max-h-[27vh] sm:max-h-[29vh]";
+
   return (
     <div
       className={`bg-[#070e17] text-slate-100 court-bg flex flex-col justify-between ${
@@ -588,7 +601,7 @@ export default function LiveAuctionPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-3 flex-1 min-h-0 items-stretch">
         
         {/* ================= LEFT SIDE: Current Player Profile & Specs ================= */}
-        <div className="lg:col-span-3 flex flex-col min-h-0 justify-between">
+        <div className="lg:col-span-3 xl:col-span-3 flex flex-col min-h-0 justify-between">
           <div className="card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 flex-1 flex flex-col justify-between shadow-xl min-h-0 overflow-y-auto">
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -691,7 +704,7 @@ export default function LiveAuctionPage() {
                     : "bg-slate-900/60 border-slate-800/80"
                 }`}>
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+                    <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
                       {nextPlayer.photo ? (
                         <img
                           src={resolvePlayerPhoto(nextPlayer.photo) || nextPlayer.photo}
@@ -707,7 +720,7 @@ export default function LiveAuctionPage() {
                       ) : null}
                       <span
                         style={{ display: nextPlayer.photo ? "none" : "flex" }}
-                        className="text-xs items-center justify-center h-full w-full bg-slate-800"
+                        className="text-base items-center justify-center h-full w-full bg-slate-800"
                       >
                         🏸
                       </span>
@@ -771,7 +784,7 @@ export default function LiveAuctionPage() {
         </div>
 
         {/* ================= CENTER: Large Player Photo, Live Status, Timer ================= */}
-        <div className="lg:col-span-5 flex flex-col min-h-0 items-center justify-center">
+        <div className="lg:col-span-5 xl:col-span-6 flex flex-col min-h-0 items-center justify-center">
           <div className="w-full card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 text-center flex flex-col items-center justify-center relative overflow-hidden stadium-glow h-full">
             
             {/* Top status indicator badge */}
@@ -807,11 +820,11 @@ export default function LiveAuctionPage() {
             </div>
 
             {/* Big Player Photo with Live Halo */}
-            <div className="relative mb-2.5">
+            <div className="relative mb-3">
               <div
-                className={`w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 max-h-[22vh] rounded-2xl overflow-hidden border-3 bg-slate-900 shadow-2xl transition-all duration-300 ${
+                className={`${photoContainerClass} rounded-2xl overflow-hidden border-3 sm:border-4 bg-slate-900 shadow-2xl transition-all duration-300 ${
                   auctionState.status === "LIVE"
-                    ? "border-emerald-400 shadow-emerald-500/30 scale-102 ring-4 ring-emerald-500/20"
+                    ? "border-emerald-400 shadow-emerald-500/40 scale-102 ring-4 sm:ring-6 ring-emerald-500/20"
                     : "border-slate-700"
                 }`}
               >
@@ -830,10 +843,10 @@ export default function LiveAuctionPage() {
                 ) : null}
                 <div
                   style={{ display: currentPlayer?.photo ? "none" : "flex" }}
-                  className="w-full h-full flex flex-col items-center justify-center text-slate-600"
+                  className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4"
                 >
-                  <span className="text-5xl">🏸</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
+                  <span className="text-6xl sm:text-7xl lg:text-8xl">🏸</span>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 mt-2">
                     {currentPlayer?.name || "Badminton Star"}
                   </span>
                 </div>
@@ -842,10 +855,10 @@ export default function LiveAuctionPage() {
               {/* Quick Admin Photo Upload Button */}
               {role === "admin" && currentPlayer && (
                 <label
-                  className="absolute top-1.5 right-1.5 p-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition shadow-md z-10"
+                  className="absolute top-2 right-2 p-2 rounded-xl bg-slate-900/90 hover:bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition shadow-xl z-20"
                   title="Upload / Replace player photo directly from device"
                 >
-                  <Camera className="w-3.5 h-3.5" />
+                  <Camera className="w-4 h-4" />
                   <input
                     type="file"
                     accept="image/*"
@@ -883,26 +896,36 @@ export default function LiveAuctionPage() {
 
               {/* Status flag on photo */}
               {currentPlayer && (
-                <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-slate-900/95 border border-slate-700 text-white font-bold text-[10px] shadow-lg uppercase tracking-wider whitespace-nowrap">
-                  {currentPlayer.gender} • {currentPlayer.branch}
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-slate-900/95 border border-slate-700 text-emerald-400 font-black text-[11px] sm:text-xs shadow-xl uppercase tracking-wider whitespace-nowrap z-10">
+                  <span className="text-white">{currentPlayer.gender}</span> • <span>{currentPlayer.branch}</span>
                 </div>
               )}
             </div>
 
             {/* Player Name */}
-            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-black text-white tracking-tight mb-0.5 truncate max-w-full">
+            <h2
+              className={`font-black text-white tracking-tight mt-1 mb-0.5 truncate max-w-full ${
+                role === "viewer"
+                  ? "text-2xl sm:text-3xl lg:text-4xl xl:text-5xl"
+                  : "text-xl sm:text-2xl lg:text-3xl xl:text-4xl"
+              }`}
+            >
               {currentPlayer ? currentPlayer.name : "Waiting for Player"}
             </h2>
 
             {/* Roll & department */}
             {currentPlayer && (
-              <p className="text-xs sm:text-sm font-mono text-emerald-400 font-bold mb-1.5">
+              <p
+                className={`font-mono font-bold text-emerald-400 mb-1 sm:mb-1.5 ${
+                  role === "viewer" ? "text-sm sm:text-base lg:text-lg" : "text-xs sm:text-sm"
+                }`}
+              >
                 Roll No: {currentPlayer.rollNumber}
               </p>
             )}
 
             {/* Countdown Timer Ring / Bar */}
-            <div className="w-full max-w-xs mt-1 mb-1.5">
+            <div className={`w-full ${role === "viewer" ? "max-w-sm" : "max-w-xs"} mt-1 mb-1.5`}>
               <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider mb-1">
                 <span className="text-slate-400 flex items-center gap-1">
                   <Clock className="w-3 h-3 text-slate-400" />
@@ -935,6 +958,20 @@ export default function LiveAuctionPage() {
                 />
               </div>
             </div>
+
+            {/* Spectator Live Arena Badge */}
+            {role === "viewer" && currentPlayer && (
+              <div className="mt-2 w-full max-w-sm p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  <span className="font-extrabold text-emerald-400">PROJECTOR BROADCAST</span>
+                  <span>•</span>
+                  <span className="text-amber-400 font-bold">
+                    {highestTeam ? `${highestTeam.name} leads` : "Opening Bid Required"}
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Admin Live Controls Banner */}
             {role === "admin" && currentPlayer && (
@@ -1161,7 +1198,7 @@ export default function LiveAuctionPage() {
         </div>
 
         {/* ================= RIGHT SIDE: Live Bid Information & Bid History ================= */}
-        <div className="lg:col-span-4 flex flex-col min-h-0 justify-between">
+        <div className="lg:col-span-4 xl:col-span-3 flex flex-col min-h-0 justify-between">
           {/* Big Live Bid Board */}
           <div className="card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 shadow-xl flex-1 flex flex-col justify-between min-h-0">
             <div>

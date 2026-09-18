@@ -169,7 +169,7 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Live",
+      "status": "Available",
       "queueOrder": 3,
       "notes": "Imported from Google Sheet",
       "round": 1
@@ -185,9 +185,10 @@
       "playingType": "Both",
       "skillLevel": "Intermediate",
       "basePrice": 20,
-      "status": "Available",
+      "status": "Live",
       "queueOrder": 4,
-      "notes": "Imported from Google Sheet"
+      "notes": "Imported from Google Sheet",
+      "round": 1
     },
     {
       "id": "imported-1789742167651-5",
@@ -987,17 +988,17 @@
   ],
   "auctionState": {
     "status": "LIVE",
-    "currentPlayerId": "imported-1789742167651-3",
+    "currentPlayerId": "imported-1789742167651-4",
     "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 474,
+    "timerSeconds": 599,
     "initialTimerSeconds": 600,
     "selectedIncrement": 50,
     "isSoundEnabled": true,
     "bidHistory": [],
     "currentRound": 1,
-    "lastAction": "Auction started for Kowshik K at 20 coins"
+    "lastAction": "Auction started for Kavuru Bala Siva at 20 coins"
   },
   "bids": [
     {

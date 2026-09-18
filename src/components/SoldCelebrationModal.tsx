@@ -88,7 +88,7 @@ export default function SoldCelebrationModal({
         {/* Player Photo & Details */}
         <div className="flex flex-col items-center mb-6">
           <div className="relative mb-4">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-amber-400 shadow-2xl bg-slate-800">
+            <div className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-full overflow-hidden border-4 sm:border-6 border-amber-400 shadow-2xl bg-slate-800">
               {player.photo ? (
                 <img
                   src={resolvePlayerPhoto(player.photo) || player.photo}
