@@ -68,6 +68,12 @@ export default function LiveAuctionPage() {
       } catch {}
     }
     setSoundOn(soundManager.isEnabled());
+
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFsChange);
+    return () => document.removeEventListener("fullscreenchange", handleFsChange);
   }, []);
 
   // 2. Fetch initial state & connect to Server-Sent Events (SSE)
@@ -286,15 +292,22 @@ export default function LiveAuctionPage() {
     }
   };
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        }
+        setIsFullscreen(true);
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        }
         setIsFullscreen(false);
       }
+    } catch {
+      // Fallback: toggle state for CSS projector mode
+      setIsFullscreen((prev) => !prev);
     }
   };
 
@@ -372,27 +385,29 @@ export default function LiveAuctionPage() {
 
   return (
     <div
-      className={`min-h-screen bg-[#070e17] text-slate-100 court-bg flex flex-col justify-between overflow-x-hidden ${
-        isFullscreen ? "projector-mode p-4" : "p-3 sm:p-5 lg:p-6"
+      className={`bg-[#070e17] text-slate-100 court-bg flex flex-col justify-between ${
+        isFullscreen
+          ? "projector-mode p-2 sm:p-3"
+          : "min-h-screen lg:h-screen lg:max-h-screen lg:overflow-hidden p-2 sm:p-3 lg:p-3.5"
       }`}
     >
       {/* Top Tournament Bar */}
-      <header className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between pb-2 sm:pb-2.5 border-b border-slate-800/80 mb-2 sm:mb-2.5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-xl sm:text-2xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition">
               🏸
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-black text-sm sm:text-base tracking-tight text-white group-hover:text-emerald-400 transition">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-black text-xs sm:text-sm md:text-base tracking-tight text-white group-hover:text-emerald-400 transition">
                   {settings.tournamentName}
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-extrabold uppercase">
+                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[9px] font-extrabold uppercase">
                   Live Arena
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden md:block">
+              <p className="text-[10px] sm:text-[11px] text-slate-400 hidden md:block">
                 {settings.subtitle}
               </p>
             </div>
@@ -400,10 +415,10 @@ export default function LiveAuctionPage() {
         </div>
 
         {/* Action badges, sound toggle, projector mode */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Quick status pill */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/90 border border-slate-700 text-xs font-bold">
-            <span className="relative flex h-2.5 w-2.5">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/90 border border-slate-700 text-[11px] font-bold">
+            <span className="relative flex h-2 w-2">
               <span
                 className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
                   auctionState.status === "LIVE"
@@ -414,7 +429,7 @@ export default function LiveAuctionPage() {
                 }`}
               />
               <span
-                className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                className={`relative inline-flex rounded-full h-2 w-2 ${
                   auctionState.status === "LIVE"
                     ? "bg-red-500"
                     : auctionState.status === "PAUSED"
@@ -423,7 +438,7 @@ export default function LiveAuctionPage() {
                 }`}
               />
             </span>
-            <span className="uppercase tracking-wider text-[11px]">
+            <span className="uppercase tracking-wider text-[10px] sm:text-[11px]">
               {auctionState.status === "LIVE"
                 ? "Bidding Active"
                 : auctionState.status === "PAUSED"
@@ -440,74 +455,78 @@ export default function LiveAuctionPage() {
               const newState = soundManager.toggleSound();
               setSoundOn(newState);
             }}
-            className={`p-2 rounded-xl border text-xs font-bold transition ${
+            className={`p-1.5 rounded-xl border text-xs font-bold transition ${
               soundOn
                 ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
                 : "bg-slate-800 border-slate-700 text-slate-400"
             }`}
             title={soundOn ? "Mute sound" : "Enable sound"}
           >
-            {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
           </button>
 
           {/* Projector Fullscreen Mode */}
           <button
             onClick={toggleFullscreen}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700 hover:border-slate-500 text-xs font-bold text-slate-200 hover:text-white transition shadow-sm"
-            title="Toggle Big-Screen Projector Mode"
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-black transition shadow-sm ${
+              isFullscreen
+                ? "bg-amber-500 text-slate-950 border-amber-400 shadow-amber-500/20"
+                : "bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40"
+            }`}
+            title="Toggle Big-Screen Projector Mode (F11)"
           >
-            {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
-            <span className="hidden sm:inline">
-              {isFullscreen ? "Exit Projector" : "Projector Mode"}
+            {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+            <span className="font-extrabold text-[11px] sm:text-xs">
+              {isFullscreen ? "Exit Projector" : "🖥️ Projector Fullscreen"}
             </span>
           </button>
 
           {/* Role badge */}
           {role === "captain" && currentUser ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <div
-                className="px-3 py-1.5 rounded-xl border text-xs font-black tracking-wider flex items-center gap-1.5 shadow-sm"
+                className="px-2.5 py-1 rounded-xl border text-[11px] font-black tracking-wider flex items-center gap-1.5 shadow-sm"
                 style={{
                   backgroundColor: `${currentUser.teamColor || "#10b981"}25`,
                   borderColor: `${currentUser.teamColor || "#10b981"}60`,
                   color: currentUser.teamColor || "#34d399",
                 }}
               >
-                <span className="text-sm">{currentUser.teamLogo || "🏸"}</span>
-                <span className="truncate max-w-[120px] sm:max-w-[180px]">
-                  {currentUser.teamName} (Capt. {currentUser.name?.split(" ")[0]})
+                <span className="text-xs">{currentUser.teamLogo || "🏸"}</span>
+                <span className="truncate max-w-[90px] sm:max-w-[150px]">
+                  {currentUser.teamName}
                 </span>
               </div>
               <Link
                 href="/login"
-                className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 transition"
+                className="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-slate-300 transition"
               >
                 Switch
               </Link>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <div
-                className={`px-3 py-1.5 rounded-xl border text-xs font-black tracking-wider uppercase flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-xl border text-[11px] font-black tracking-wider uppercase flex items-center gap-1 ${
                   role === "admin"
                     ? "bg-amber-500/10 border-amber-500/40 text-amber-400"
                     : "bg-sky-500/10 border-sky-500/40 text-sky-400"
                 }`}
               >
-                {role === "admin" ? <ShieldCheck className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                {role === "admin" ? <ShieldCheck className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                 <span>{role === "admin" ? "Admin" : "Spectator"}</span>
               </div>
               {role === "admin" ? (
                 <Link
                   href="/admin/dashboard"
-                  className="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 transition"
+                  className="hidden sm:inline-flex px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 transition"
                 >
                   Console
                 </Link>
               ) : (
                 <Link
                   href="/login"
-                  className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 transition"
+                  className="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-slate-300 transition"
                 >
                   Login
                 </Link>
@@ -518,81 +537,83 @@ export default function LiveAuctionPage() {
       </header>
 
       {/* Main Sports Broadcast Arena Layout (Left - Center - Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 flex-1 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-3 flex-1 min-h-0 items-stretch">
         
         {/* ================= LEFT SIDE: Current Player Profile & Specs ================= */}
-        <div className="lg:col-span-3 flex flex-col gap-4">
-          <div className="card-glass rounded-3xl p-5 border border-slate-800 flex-1 flex flex-col justify-between shadow-xl">
+        <div className="lg:col-span-3 flex flex-col min-h-0 justify-between">
+          <div className="card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 flex-1 flex flex-col justify-between shadow-xl min-h-0 overflow-y-auto">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs uppercase font-extrabold tracking-wider text-emerald-400">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] uppercase font-black tracking-wider text-emerald-400">
                   Player Specifications
                 </span>
                 {currentPlayer && (
                   <button
                     onClick={() => setSelectedPlayerForModal(currentPlayer)}
-                    className="text-xs text-sky-400 hover:text-sky-300 font-semibold underline"
+                    className="text-[11px] text-sky-400 hover:text-sky-300 font-bold underline"
                   >
-                    Full Details
+                    Details
                   </button>
                 )}
               </div>
 
               {currentPlayer ? (
-                <div className="space-y-3">
-                  <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block font-semibold">
+                <div className="space-y-2">
+                  <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                    <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">
                       College Identity
                     </span>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-base font-bold text-white">{currentPlayer.name}</span>
-                      <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    <div className="flex items-center justify-between mt-0.5">
+                      <span className="text-sm sm:text-base font-black text-white truncate mr-2">
+                        {currentPlayer.name}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 whitespace-nowrap">
                         {currentPlayer.rollNumber}
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Branch</span>
-                      <span className="text-sm font-bold text-slate-200">{currentPlayer.branch}</span>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+                      <span className="text-[9px] text-slate-400 uppercase font-bold block">Branch</span>
+                      <span className="text-xs font-bold text-slate-200 truncate block">{currentPlayer.branch}</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Year</span>
-                      <span className="text-sm font-bold text-slate-200">{currentPlayer.year} Year</span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Playing Type</span>
-                      <span className="text-sm font-extrabold text-sky-400">{currentPlayer.playingType}</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Skill Level</span>
-                      <span className="text-sm font-extrabold text-emerald-400">{currentPlayer.skillLevel}</span>
+                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+                      <span className="text-[9px] text-slate-400 uppercase font-bold block">Year</span>
+                      <span className="text-xs font-bold text-slate-200 truncate block">{currentPlayer.year} Year</span>
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
-                    <span className="text-[11px] text-amber-300 uppercase font-semibold block">Base Price</span>
-                    <span className="text-2xl font-black text-amber-400">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+                      <span className="text-[9px] text-slate-400 uppercase font-bold block">Playing Type</span>
+                      <span className="text-xs font-black text-sky-400 truncate block">{currentPlayer.playingType}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+                      <span className="text-[9px] text-slate-400 uppercase font-bold block">Skill Level</span>
+                      <span className="text-xs font-black text-emerald-400 truncate block">{currentPlayer.skillLevel}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+                    <span className="text-[10px] text-amber-300 uppercase font-black block">Base Price</span>
+                    <span className="text-xl font-black text-amber-400">
                       {formatCurrency(currentPlayer.basePrice, currency)}
                     </span>
                   </div>
 
                   {currentPlayer.notes && (
-                    <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800/60 text-xs text-slate-300 italic">
+                    <div className="p-2 rounded-lg bg-slate-900/40 border border-slate-800/60 text-[11px] text-slate-300 italic line-clamp-2">
                       &ldquo;{currentPlayer.notes}&rdquo;
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="p-8 text-center text-slate-400 flex flex-col items-center justify-center my-auto">
-                  <div className="text-4xl mb-3">🏸</div>
-                  <p className="font-bold text-sm text-slate-300">No Player Under the Hammer</p>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Select a player from the queue below to start the bidding war.
+                <div className="p-6 text-center text-slate-400 flex flex-col items-center justify-center my-auto">
+                  <div className="text-3xl mb-2">🏸</div>
+                  <p className="font-bold text-xs text-slate-300">No Player Under Hammer</p>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Select a player to start bidding.
                   </p>
                 </div>
               )}
@@ -600,29 +621,29 @@ export default function LiveAuctionPage() {
 
             {/* Next Up preview box */}
             {nextPlayer ? (
-              <div className="mt-4 pt-4 border-t border-slate-800">
-                <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="text-slate-400 font-bold uppercase flex items-center gap-1.5">
+              <div className="mt-2 pt-2 border-t border-slate-800">
+                <div className="flex items-center justify-between text-[11px] mb-1">
+                  <span className="text-slate-400 font-bold uppercase flex items-center gap-1">
                     {isNextRound2 ? (
                       <>
-                        <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-                        <span className="text-amber-400">Up Next: Round 2 ({round2Eligible.length} unsold in line)</span>
+                        <RotateCcw className="w-3 h-3 text-amber-400" />
+                        <span className="text-amber-400">Up Next: R2 ({round2Eligible.length})</span>
                       </>
                     ) : (
-                      <span>Up Next in Queue ({allAvailablePlayers.length} in line)</span>
+                      <span>Up Next ({allAvailablePlayers.length})</span>
                     )}
                   </span>
-                  <span className={`font-mono font-bold ${isNextRound2 ? "text-amber-400" : "text-emerald-400"}`}>
+                  <span className={`font-mono font-bold text-xs ${isNextRound2 ? "text-amber-400" : "text-emerald-400"}`}>
                     #{nextPlayer.queueOrder} {isNextRound2 ? "(R2)" : ""}
                   </span>
                 </div>
-                <div className={`flex items-center justify-between p-2.5 rounded-xl border ${
+                <div className={`flex items-center justify-between p-2 rounded-xl border ${
                   isNextRound2
                     ? "bg-amber-500/10 border-amber-500/30"
                     : "bg-slate-900/60 border-slate-800/80"
                 }`}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-7 h-7 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
                       {nextPlayer.photo ? (
                         <img
                           src={nextPlayer.photo}
@@ -633,7 +654,7 @@ export default function LiveAuctionPage() {
                             const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                             if (fallback) fallback.style.display = "flex";
                           }}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
                         />
                       ) : null}
                       <span
@@ -643,59 +664,52 @@ export default function LiveAuctionPage() {
                         🏸
                       </span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-white block">{nextPlayer.name}</span>
-                        {isNextRound2 && (
-                          <span className="text-[9px] font-black px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                            ROUND 2
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] text-slate-400">{nextPlayer.branch} • {nextPlayer.playingType}</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold text-white block truncate">{nextPlayer.name}</span>
+                      <span className="text-[10px] text-slate-400 block truncate">{nextPlayer.branch} • {nextPlayer.playingType}</span>
                     </div>
                   </div>
 
                   {role === "admin" && (
                     <button
                       onClick={() => handleStartAuction(nextPlayer.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm active:scale-95 ${
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm active:scale-95 flex-shrink-0 ml-1 ${
                         isNextRound2
                           ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40"
                           : "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
                       }`}
-                      title={`Call #${nextPlayer.queueOrder} ${nextPlayer.name} to the hammer ${isNextRound2 ? "(Round 2)" : ""}`}
+                      title={`Call #${nextPlayer.queueOrder} ${nextPlayer.name}`}
                     >
-                      <span>Call Next {isNextRound2 ? "(R2)" : ""}</span>
+                      <span>Call Next</span>
                     </button>
                   )}
                 </div>
 
-                {/* Quick jump to any player in queue selector */}
+                {/* Quick jump */}
                 {role === "admin" && (allAvailablePlayers.length > 0 || round2Eligible.length > 0) && (
-                  <div className="mt-2.5">
+                  <div className="mt-1.5">
                     <select
                       value=""
                       onChange={(e) => {
                         if (e.target.value) handleStartAuction(e.target.value);
                       }}
-                      className="w-full p-2 bg-slate-900 border border-slate-700/80 rounded-xl text-[11px] text-slate-300 focus:outline-hidden focus:border-emerald-400 cursor-pointer"
+                      className="w-full p-1.5 bg-slate-900 border border-slate-700/80 rounded-lg text-[11px] text-slate-300 focus:outline-hidden focus:border-emerald-400 cursor-pointer"
                     >
-                      <option value="">Jump to specific player in queue...</option>
+                      <option value="">Jump to player...</option>
                       {allAvailablePlayers.length > 0 && (
-                        <optgroup label={`Round 1 Lineup (${allAvailablePlayers.length})`}>
+                        <optgroup label={`Round 1 (${allAvailablePlayers.length})`}>
                           {allAvailablePlayers.map((p) => (
                             <option key={p.id} value={p.id}>
-                              #{p.queueOrder} - {p.name} ({p.branch} • {p.playingType})
+                              #{p.queueOrder} - {p.name} ({p.branch})
                             </option>
                           ))}
                         </optgroup>
                       )}
                       {round2Eligible.length > 0 && (
-                        <optgroup label={`Round 2 Unsold Players (${round2Eligible.length})`}>
+                        <optgroup label={`Round 2 (${round2Eligible.length})`}>
                           {round2Eligible.map((p) => (
                             <option key={p.id} value={p.id}>
-                              #{p.queueOrder} - {p.name} (Round 2 • {p.branch})
+                              #{p.queueOrder} - {p.name} (R2)
                             </option>
                           ))}
                         </optgroup>
@@ -704,56 +718,52 @@ export default function LiveAuctionPage() {
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="mt-4 pt-4 border-t border-slate-800 text-center text-xs text-slate-500 py-2">
-                <span>All queued players across all rounds have been called</span>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
 
         {/* ================= CENTER: Large Player Photo, Live Status, Timer ================= */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center gap-4">
-          <div className="w-full card-glass rounded-3xl p-6 md:p-8 border border-slate-800 text-center flex flex-col items-center justify-center relative overflow-hidden stadium-glow">
+        <div className="lg:col-span-5 flex flex-col min-h-0 items-center justify-center">
+          <div className="w-full card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 text-center flex flex-col items-center justify-center relative overflow-hidden stadium-glow h-full">
             
             {/* Top status indicator badge */}
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+            <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5">
               {auctionState.status === "LIVE" ? (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-extrabold text-xs uppercase tracking-widest animate-pulse">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-black text-[11px] uppercase tracking-wider animate-pulse">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                   <span>ON THE HAMMER • LIVE</span>
                 </div>
               ) : auctionState.status === "PAUSED" ? (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-xs uppercase tracking-widest">
-                  <Pause className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-black text-[11px] uppercase tracking-wider">
+                  <Pause className="w-3 h-3" />
                   <span>AUCTION PAUSED</span>
                 </div>
               ) : auctionState.status === "ENDED" ? (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-xs uppercase tracking-widest">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>AUCTION ENDED • AWAITING DECISION</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 font-black text-[11px] uppercase tracking-wider">
+                  <Clock className="w-3 h-3" />
+                  <span>TIME&apos;S UP • AWAITING DECISION</span>
                 </div>
               ) : (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
                   <span>AUCTION STANDBY</span>
                 </div>
               )}
 
               {/* Round 2 Second Chance Badge */}
               {(currentPlayer?.round === 2 || auctionState.currentRound === 2) && (
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-black text-xs uppercase tracking-wider shadow-sm animate-pulse">
-                  <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-                  <span>ROUND 2 • SECOND CHANCE</span>
+                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-black text-[11px] uppercase tracking-wider shadow-sm animate-pulse">
+                  <RotateCcw className="w-3 h-3 text-amber-400" />
+                  <span>ROUND 2</span>
                 </div>
               )}
             </div>
 
             {/* Big Player Photo with Live Halo */}
-            <div className="relative mb-5">
+            <div className="relative mb-2.5">
               <div
-                className={`w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-3xl overflow-hidden border-4 bg-slate-900 shadow-2xl transition-all duration-300 ${
+                className={`w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 max-h-[22vh] rounded-2xl overflow-hidden border-3 bg-slate-900 shadow-2xl transition-all duration-300 ${
                   auctionState.status === "LIVE"
-                    ? "border-emerald-400 shadow-emerald-500/30 scale-102 ring-8 ring-emerald-500/10"
+                    ? "border-emerald-400 shadow-emerald-500/30 scale-102 ring-4 ring-emerald-500/20"
                     : "border-slate-700"
                 }`}
               >
@@ -767,15 +777,15 @@ export default function LiveAuctionPage() {
                       const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                       if (fallback) fallback.style.display = "flex";
                     }}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 ) : null}
                 <div
                   style={{ display: currentPlayer?.photo ? "none" : "flex" }}
                   className="w-full h-full flex flex-col items-center justify-center text-slate-600"
                 >
-                  <span className="text-7xl">🏸</span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-2">
+                  <span className="text-5xl">🏸</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">
                     {currentPlayer?.name || "Badminton Star"}
                   </span>
                 </div>
@@ -783,35 +793,35 @@ export default function LiveAuctionPage() {
 
               {/* Status flag on photo */}
               {currentPlayer && (
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-slate-900/95 border border-slate-700 text-white font-bold text-xs shadow-lg uppercase tracking-wider whitespace-nowrap">
+                <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-slate-900/95 border border-slate-700 text-white font-bold text-[10px] shadow-lg uppercase tracking-wider whitespace-nowrap">
                   {currentPlayer.gender} • {currentPlayer.branch}
                 </div>
               )}
             </div>
 
             {/* Player Name */}
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-black text-white tracking-tight mb-0.5 truncate max-w-full">
               {currentPlayer ? currentPlayer.name : "Waiting for Player"}
             </h2>
 
             {/* Roll & department */}
             {currentPlayer && (
-              <p className="text-sm sm:text-base font-mono text-emerald-400 font-bold mb-4">
+              <p className="text-xs sm:text-sm font-mono text-emerald-400 font-bold mb-1.5">
                 Roll No: {currentPlayer.rollNumber}
               </p>
             )}
 
             {/* Countdown Timer Ring / Bar */}
-            <div className="w-full max-w-sm mt-2">
-              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider mb-2">
-                <span className="text-slate-400 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <div className="w-full max-w-xs mt-1 mb-1.5">
+              <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider mb-1">
+                <span className="text-slate-400 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-slate-400" />
                   <span>Bid Clock</span>
                 </span>
                 <span
-                  className={`text-xl font-black tracking-tight ${
+                  className={`text-base font-black tracking-tight ${
                     timerSec <= 5 && auctionState.status === "LIVE"
-                      ? "text-rose-400 animate-pulse text-2xl"
+                      ? "text-rose-400 animate-pulse text-lg"
                       : "text-white"
                   }`}
                 >
@@ -822,7 +832,7 @@ export default function LiveAuctionPage() {
               </div>
 
               {/* Animated Progress Bar */}
-              <div className="w-full h-3.5 rounded-full bg-slate-800/80 p-0.5 border border-slate-700/60 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-slate-800/80 p-0.5 border border-slate-700/60 overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     timerSec <= 5
@@ -838,28 +848,28 @@ export default function LiveAuctionPage() {
 
             {/* Admin Live Controls Banner */}
             {role === "admin" && currentPlayer && (
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 w-full pt-4 border-t border-slate-800">
+              <div className="mt-1.5 pt-2 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 w-full border-t border-slate-800/80">
                 {auctionState.status === "IDLE" || auctionState.status === "ENDED" ? (
                   <button
                     onClick={() => handleStartAuction(currentPlayer.id)}
-                    className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition active:scale-95"
+                    className="px-4 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-emerald-500/25 transition active:scale-95"
                   >
-                    <Play className="w-4 h-4 fill-current" />
+                    <Play className="w-3.5 h-3.5 fill-current" />
                     <span>Start Auction</span>
                   </button>
                 ) : (
                   <button
                     onClick={handlePauseResume}
-                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition"
+                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition"
                   >
                     {auctionState.status === "LIVE" ? (
                       <>
-                        <Pause className="w-4 h-4" />
+                        <Pause className="w-3.5 h-3.5" />
                         <span>Pause</span>
                       </>
                     ) : (
                       <>
-                        <Play className="w-4 h-4 fill-current" />
+                        <Play className="w-3.5 h-3.5 fill-current" />
                         <span>Resume</span>
                       </>
                     )}
@@ -870,18 +880,18 @@ export default function LiveAuctionPage() {
                 <button
                   onClick={handleSold}
                   disabled={!auctionState.highestBidTeamId}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-amber-500/30 transition active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
+                  className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-amber-500/30 transition active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-slate-950" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-slate-950" />
                   <span>SOLD!</span>
                 </button>
 
                 {/* UNSOLD Button */}
                 <button
                   onClick={handleUnsold}
-                  className="px-4 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-400 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition active:scale-95"
+                  className="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-400 font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition active:scale-95"
                 >
-                  <XCircle className="w-4 h-4" />
+                  <XCircle className="w-3.5 h-3.5" />
                   <span>UNSOLD</span>
                 </button>
 
@@ -889,87 +899,86 @@ export default function LiveAuctionPage() {
                 <button
                   onClick={handleUndoBid}
                   disabled={auctionState.bidHistory.length === 0}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-40"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1 transition disabled:opacity-40"
                   title="Undo last bid"
                 >
-                  <Undo2 className="w-4 h-4" />
+                  <Undo2 className="w-3.5 h-3.5" />
                   <span>Undo</span>
                 </button>
 
                 {/* RESET CURRENT AUCTION */}
                 <button
                   onClick={handleResetAuction}
-                  className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs transition"
+                  className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs transition"
                   title="Reset Current Auction"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}
 
             {/* Captain Live Bidding Cockpit */}
             {role === "captain" && captainTeam && currentPlayer && (
-              <div className="mt-6 w-full p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 via-slate-950 to-slate-900/95 border border-emerald-500/40 shadow-2xl relative overflow-hidden">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-3 pb-3 border-b border-slate-800">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-3xl">{captainTeam.logo || "🏸"}</span>
+              <div className="mt-2 w-full p-2.5 rounded-2xl bg-gradient-to-r from-slate-900/95 via-slate-950 to-slate-900/95 border border-emerald-500/40 shadow-2xl relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{captainTeam.logo || "🏸"}</span>
                     <div className="text-left">
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-sm text-white">{captainTeam.name}</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
-                          Captain Console
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black text-xs text-white">{captainTeam.name}</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
+                          Captain
                         </span>
                       </div>
-                      <span className="text-xs text-slate-400">Capt. {captainTeam.captain}</span>
+                      <span className="text-[11px] text-slate-400">Capt. {captainTeam.captain}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Your Purse</span>
-                      <span className="text-sm font-mono font-black text-amber-400">
+                      <span className="text-[9px] text-slate-400 uppercase font-semibold block">Purse</span>
+                      <span className="text-xs font-mono font-black text-amber-400">
                         {formatCurrency(captainTeam.remainingBudget, currency)}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Squad</span>
-                      <span className="text-sm font-mono font-black text-slate-200">
-                        {captainTeam.players.length} Players
+                      <span className="text-[9px] text-slate-400 uppercase font-semibold block">Squad</span>
+                      <span className="text-xs font-mono font-black text-slate-200">
+                        {captainTeam.players.length}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Real-time Status Alert for Captain */}
-                <div className="mb-3">
+                <div className="mb-2">
                   {isMyTeamLeading ? (
-                    <div className="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-black text-xs text-center flex items-center justify-center gap-2 animate-pulse">
-                      <Sparkles className="w-4 h-4 text-emerald-400" />
-                      <span>YOUR TEAM IS THE HIGHEST BIDDER AT {formatCurrency(auctionState.currentBid, currency)}! 🎉</span>
+                    <div className="p-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-black text-[11px] text-center flex items-center justify-center gap-1.5 animate-pulse">
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>YOUR TEAM LEADS AT {formatCurrency(auctionState.currentBid, currency)}! 🎉</span>
                     </div>
                   ) : auctionState.status === "LIVE" ? (
-                    <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs text-center flex items-center justify-center gap-2">
-                      <span>⚠️ {highestTeam ? `${highestTeam.name} is leading with ${formatCurrency(auctionState.currentBid, currency)}.` : "Opening bid required."} Place a bid to take the lead!</span>
+                    <div className="p-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-[11px] text-center flex items-center justify-center gap-1.5">
+                      <span>⚠️ {highestTeam ? `${highestTeam.name} leads with ${formatCurrency(auctionState.currentBid, currency)}.` : "Opening bid required."}</span>
                     </div>
                   ) : (
-                    <div className="p-2 rounded-xl bg-slate-800/80 text-slate-400 text-xs text-center">
-                      Auction is currently {auctionState.status.toLowerCase()}. Awaiting auctioneer to call bids.
+                    <div className="p-1.5 rounded-lg bg-slate-800/80 text-slate-400 text-[11px] text-center">
+                      Auction is currently {auctionState.status.toLowerCase()}.
                     </div>
                   )}
                 </div>
 
                 {/* Captain Bid Controls */}
-                <div className="flex flex-col sm:flex-row items-center gap-2.5">
-                  {/* Step increment selector */}
+                <div className="flex flex-col sm:flex-row items-center gap-2">
                   <div className="flex items-center gap-1 w-full sm:w-auto">
                     {(settings.bidIncrements || [10, 20, 50, 100]).map((inc) => (
                       <button
                         key={inc}
                         type="button"
                         onClick={() => sendAction("SET_INCREMENT", { increment: inc })}
-                        className={`flex-1 sm:flex-initial py-2 px-2.5 rounded-xl text-xs font-black transition ${
+                        className={`flex-1 sm:flex-initial py-1 px-2 rounded-lg text-xs font-black transition ${
                           auctionState.selectedIncrement === inc
-                            ? "bg-emerald-500 text-slate-950 shadow-md"
+                            ? "bg-emerald-500 text-slate-950 shadow-xs"
                             : "bg-slate-800 text-slate-300 hover:bg-slate-700"
                         }`}
                       >
@@ -978,7 +987,6 @@ export default function LiveAuctionPage() {
                     ))}
                   </div>
 
-                  {/* Big Captain Bid Action Button */}
                   <button
                     type="button"
                     onClick={() => handlePlaceBid(captainTeam.id)}
@@ -987,7 +995,7 @@ export default function LiveAuctionPage() {
                       !canMyTeamAfford ||
                       auctionState.status !== "LIVE"
                     }
-                    className={`flex-1 w-full py-3 px-5 rounded-xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition active:scale-98 ${
+                    className={`flex-1 w-full py-2 px-4 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg transition active:scale-98 ${
                       isMyTeamLeading
                         ? "bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 cursor-default"
                         : canMyTeamAfford && auctionState.status === "LIVE"
@@ -995,15 +1003,15 @@ export default function LiveAuctionPage() {
                         : "bg-slate-800 text-slate-500 border border-slate-800 cursor-not-allowed"
                     }`}
                   >
-                    <Trophy className="w-4 h-4 fill-current" />
+                    <Trophy className="w-3.5 h-3.5 fill-current" />
                     <span>
                       {isMyTeamLeading
-                        ? "Your Team Is Leading!"
+                        ? "Leading!"
                         : !canMyTeamAfford
-                        ? "Low Team Purse"
+                        ? "Low Purse"
                         : auctionState.status !== "LIVE"
-                        ? "Waiting For Bidding..."
-                        : `+ BID ${formatCurrency(nextBidAmount, currency)} FOR ${captainTeam.name}`}
+                        ? "Waiting..."
+                        : `+ BID ${formatCurrency(nextBidAmount, currency)}`}
                     </span>
                   </button>
                 </div>
@@ -1013,20 +1021,20 @@ export default function LiveAuctionPage() {
         </div>
 
         {/* ================= RIGHT SIDE: Live Bid Information & Bid History ================= */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
+        <div className="lg:col-span-4 flex flex-col min-h-0 justify-between">
           {/* Big Live Bid Board */}
-          <div className="card-glass rounded-3xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+          <div className="card-glass rounded-2xl p-3 sm:p-4 border border-slate-800 shadow-xl flex-1 flex flex-col justify-between min-h-0">
             <div>
-              <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400 block mb-1">
+              <span className="text-[11px] uppercase font-black tracking-wider text-slate-400 block mb-1">
                 Current Highest Bid
               </span>
 
               {/* Big Price Display */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-slate-900 border border-amber-500/30 mb-4 text-center">
-                <span className="text-4xl sm:text-5xl md:text-6xl font-black text-amber-400 tracking-tight drop-shadow-md">
+              <div className="p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-slate-900 border border-amber-500/30 mb-2 text-center">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-amber-400 tracking-tight drop-shadow-md">
                   {formatCurrency(auctionState.currentBid, currency)}
                 </span>
-                <span className="text-[11px] text-slate-400 block mt-1">
+                <span className="text-[10px] text-slate-400 block mt-0.5">
                   {!auctionState.highestBidTeamId
                     ? "Base Opening Price • Awaiting First Bid"
                     : "Current Leading Offer"}
@@ -1034,28 +1042,28 @@ export default function LiveAuctionPage() {
               </div>
 
               {/* Highest Bidding Team Banner */}
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 mb-4">
-                <span className="text-[11px] uppercase font-bold tracking-wider text-slate-400 block mb-1.5">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 mb-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
                   Leading Franchise
                 </span>
 
                 {highestTeam ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">{highestTeam.logo || "🏸"}</span>
-                    <div>
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-2xl">{highestTeam.logo || "🏸"}</span>
+                    <div className="min-w-0">
                       <span
-                        className="text-lg md:text-xl font-black tracking-wide block"
+                        className="text-base font-black tracking-wide block truncate"
                         style={{ color: highestTeam.color || "#f59e0b" }}
                       >
                         {highestTeam.name}
                       </span>
-                      <span className="text-xs text-slate-400 font-semibold">
+                      <span className="text-[11px] text-slate-400 font-semibold block">
                         Purse Remaining: {formatCurrency(highestTeam.remainingBudget, currency)}
                       </span>
                     </div>
                   </div>
                 ) : (
-                  <div className="py-2 text-sm text-slate-400 font-semibold italic">
+                  <div className="py-1 text-xs text-slate-400 font-semibold italic">
                     No team has placed a bid yet
                   </div>
                 )}
@@ -1063,23 +1071,23 @@ export default function LiveAuctionPage() {
 
               {/* Bid Increment Selector (for Admin) */}
               {role === "admin" && (
-                <div className="mb-4">
-                  <div className="flex items-center justify-between text-xs mb-1.5 font-bold text-slate-400">
-                    <span className="uppercase">Bid Step Increment</span>
-                    <span className="text-emerald-400">Next Bid: {formatCurrency(nextBidAmount, currency)}</span>
+                <div className="mb-2">
+                  <div className="flex items-center justify-between text-[11px] mb-1 font-bold text-slate-400">
+                    <span className="uppercase">Bid Step</span>
+                    <span className="text-emerald-400">Next: {formatCurrency(nextBidAmount, currency)}</span>
                   </div>
-                  <div className="grid grid-cols-4 gap-1.5">
+                  <div className="grid grid-cols-4 gap-1">
                     {(settings.bidIncrements || [10, 20, 50, 100]).map((inc) => (
                       <button
                         key={inc}
                         onClick={() => sendAction("SET_INCREMENT", { increment: inc })}
-                        className={`py-1.5 px-2 rounded-xl text-xs font-black transition ${
+                        className={`py-1 px-1.5 rounded-lg text-xs font-black transition ${
                           auctionState.selectedIncrement === inc
                             ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
                             : "bg-slate-800/80 text-slate-300 hover:bg-slate-800"
                         }`}
                       >
-                        +{inc} {currency}
+                        +{inc}
                       </button>
                     ))}
                   </div>
@@ -1088,42 +1096,42 @@ export default function LiveAuctionPage() {
             </div>
 
             {/* Real-time Bid Log Stream */}
-            <div className="pt-3 border-t border-slate-800">
-              <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400 flex items-center justify-between mb-2">
-                <span className="flex items-center gap-1.5">
-                  <History className="w-3.5 h-3.5" />
-                  <span>Live Bid Stream ({auctionState.bidHistory.length})</span>
+            <div className="pt-2 border-t border-slate-800 flex-1 min-h-0 flex flex-col">
+              <span className="text-[11px] uppercase font-black tracking-wider text-slate-400 flex items-center justify-between mb-1.5">
+                <span className="flex items-center gap-1">
+                  <History className="w-3 h-3" />
+                  <span>Live Stream ({auctionState.bidHistory.length})</span>
                 </span>
-                <span className="text-[10px] text-slate-400 font-normal">Latest on top</span>
+                <span className="text-[10px] text-slate-500 font-normal">Latest on top</span>
               </span>
 
-              <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+              <div className="space-y-1 max-h-24 sm:max-h-28 overflow-y-auto pr-1">
                 {auctionState.bidHistory.length === 0 ? (
-                  <div className="p-3 text-center text-xs text-slate-400 bg-slate-900/40 rounded-xl border border-slate-800/60">
+                  <div className="p-2 text-center text-[11px] text-slate-400 bg-slate-900/40 rounded-lg border border-slate-800/60">
                     Waiting for first bid...
                   </div>
                 ) : (
                   auctionState.bidHistory.map((bid, idx) => (
                     <div
                       key={bid.id}
-                      className={`flex items-center justify-between p-2 rounded-xl text-xs transition animate-in fade-in slide-in-from-top-2 ${
+                      className={`flex items-center justify-between p-1.5 rounded-lg text-[11px] transition animate-in fade-in slide-in-from-top-2 ${
                         idx === 0
                           ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-100 font-bold"
                           : "bg-slate-900/60 border border-slate-800/70 text-slate-300"
                       }`}
                     >
-                      <div className="flex items-center gap-2 truncate">
+                      <div className="flex items-center gap-1.5 truncate">
                         <span
-                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                           style={{ backgroundColor: bid.teamColor || "#10b981" }}
                         />
                         <span className="truncate">{bid.teamName}</span>
                       </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-1.5 flex-shrink-0 ml-1">
                         <span className="font-mono font-black text-amber-400">
                           {formatCurrency(bid.amount, currency)}
                         </span>
-                        <span className="text-[10px] text-slate-400">{bid.timestamp}</span>
+                        <span className="text-[9px] text-slate-500">{bid.timestamp}</span>
                       </div>
                     </div>
                   ))
@@ -1135,23 +1143,23 @@ export default function LiveAuctionPage() {
       </div>
 
       {/* ================= BOTTOM: Live Team Bidding Cards & Budget Tracking ================= */}
-      <div className="mt-4 pt-3 border-t border-slate-800/80">
-        <div className="flex items-center justify-between mb-2.5">
-          <div className="flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-amber-400" />
-            <span className="text-xs uppercase font-black tracking-wider text-slate-300">
-              Franchise Bidding Controls & Budget Purses ({teams.length} Teams)
+      <div className="mt-2 pt-2 border-t border-slate-800/80">
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="flex items-center gap-1.5">
+            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-[11px] uppercase font-black tracking-wider text-slate-300">
+              Franchise Bidding & Purses ({teams.length} Teams)
             </span>
           </div>
           {role === "viewer" && (
-            <span className="text-xs text-sky-400 font-semibold">
+            <span className="text-[11px] text-sky-400 font-semibold">
               Spectator Mode • Real-Time Broadcast
             </span>
           )}
         </div>
 
-        {/* Responsive Grid of Teams */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {/* Responsive Grid of Teams: 8 columns in a single row on desktop/projector */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-1.5 sm:gap-2">
           {teams.map((team) => {
             const isHighest = team.id === auctionState.highestBidTeamId;
             const canAfford = team.remainingBudget >= nextBidAmount;
@@ -1160,36 +1168,37 @@ export default function LiveAuctionPage() {
             return (
               <div
                 key={team.id}
-                className={`card-glass rounded-2xl p-3.5 border transition-all duration-200 flex flex-col justify-between ${
+                className={`card-glass rounded-xl p-2 border transition-all duration-200 flex flex-col justify-between ${
                   isHighest
-                    ? "border-amber-400 bg-amber-500/10 shadow-lg shadow-amber-500/10 ring-2 ring-amber-500/30 scale-102"
+                    ? "border-amber-400 bg-amber-500/10 shadow-md shadow-amber-500/10 ring-1 ring-amber-500/30"
                     : "border-slate-800 hover:border-slate-700"
                 }`}
               >
                 <div>
                   {/* Team Logo & Name */}
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2 truncate">
-                      <span className="text-xl">{team.logo || "🏸"}</span>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-base flex-shrink-0">{team.logo || "🏸"}</span>
                       <span
-                        className="text-xs font-black truncate"
+                        className="text-[11px] font-black truncate"
                         style={{ color: team.color || "#ffffff" }}
+                        title={team.name}
                       >
                         {team.name}
                       </span>
                     </div>
 
                     {isHighest && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black uppercase tracking-wider">
+                      <span className="text-[9px] px-1 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black uppercase tracking-wider flex-shrink-0 ml-1">
                         LEAD
                       </span>
                     )}
                   </div>
 
                   {/* Budget details */}
-                  <div className="space-y-1 mb-2.5 text-[11px]">
+                  <div className="space-y-0.5 mb-1.5 text-[10px]">
                     <div className="flex items-center justify-between text-slate-400">
-                      <span>Remaining:</span>
+                      <span>Purse:</span>
                       <span
                         className={`font-mono font-bold ${
                           team.remainingBudget < 100 ? "text-rose-400" : "text-emerald-400"
@@ -1198,13 +1207,13 @@ export default function LiveAuctionPage() {
                         {formatCurrency(team.remainingBudget, currency)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-400 text-[10px]">
-                      <span>Squad Size:</span>
+                    <div className="flex items-center justify-between text-slate-400 text-[9px]">
+                      <span>Squad:</span>
                       <span className="font-bold text-slate-300">{team.players.length} Players</span>
                     </div>
 
                     {/* Budget Usage Bar */}
-                    <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden mt-1">
+                    <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden mt-0.5">
                       <div
                         className="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
                         style={{ width: `${budgetPercent}%` }}
@@ -1222,20 +1231,20 @@ export default function LiveAuctionPage() {
                       auctionState.status !== "LIVE" ||
                       isHighest
                     }
-                    className={`w-full py-2 px-3 rounded-xl font-black text-xs uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-1.5 ${
+                    className={`w-full py-1.5 px-1 rounded-lg font-black text-[10px] uppercase tracking-wider transition active:scale-95 flex items-center justify-center ${
                       isHighest
                         ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-default"
                         : canAfford && auctionState.status === "LIVE"
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-md shadow-emerald-500/20"
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-xs shadow-emerald-500/20"
                         : "bg-slate-800/80 text-slate-400 border border-slate-800 cursor-not-allowed"
                     }`}
                   >
                     {isHighest ? (
-                      <span>Current Leader</span>
+                      <span>Leading</span>
                     ) : !canAfford ? (
-                      <span>Low Budget</span>
+                      <span>Low Purse</span>
                     ) : (
-                      <span>+ BID {formatCurrency(nextBidAmount, currency)}</span>
+                      <span>+ BID {nextBidAmount}</span>
                     )}
                   </button>
                 ) : role === "captain" && currentUser?.teamId === team.id ? (
@@ -1246,30 +1255,30 @@ export default function LiveAuctionPage() {
                       auctionState.status !== "LIVE" ||
                       isHighest
                     }
-                    className={`w-full py-2 px-3 rounded-xl font-black text-xs uppercase tracking-wider transition active:scale-95 flex items-center justify-center gap-1.5 ${
+                    className={`w-full py-1.5 px-1 rounded-lg font-black text-[10px] uppercase tracking-wider transition active:scale-95 flex items-center justify-center ${
                       isHighest
                         ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 cursor-default"
                         : canAfford && auctionState.status === "LIVE"
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 animate-pulse"
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-md shadow-emerald-500/25 animate-pulse"
                         : "bg-slate-800/80 text-slate-400 border border-slate-800 cursor-not-allowed"
                     }`}
                   >
                     {isHighest ? (
-                      <span>Your Team Leads!</span>
+                      <span>Leading</span>
                     ) : !canAfford ? (
-                      <span>Low Budget</span>
+                      <span>Low Purse</span>
                     ) : (
-                      <span>+ YOUR BID ({formatCurrency(nextBidAmount, currency)})</span>
+                      <span>+ BID {nextBidAmount}</span>
                     )}
                   </button>
                 ) : role === "captain" ? (
-                  <div className="w-full py-1.5 text-center text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-900/60 rounded-xl border border-slate-800/60 flex items-center justify-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-600" />
-                    <span>Locked ({team.name})</span>
+                  <div className="w-full py-1 text-center text-[9px] font-bold text-slate-500 uppercase tracking-wider bg-slate-900/60 rounded-lg border border-slate-800/60 flex items-center justify-center gap-0.5">
+                    <Lock className="w-2.5 h-2.5 text-slate-600" />
+                    <span className="truncate">Locked</span>
                   </div>
                 ) : (
-                  <div className="w-full py-1.5 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-900/60 rounded-xl border border-slate-800">
-                    {isHighest ? "Highest Bidder" : "Team Franchise"}
+                  <div className="w-full py-1 text-center text-[9px] font-bold text-slate-400 uppercase tracking-wider bg-slate-900/60 rounded-lg border border-slate-800 truncate">
+                    {isHighest ? "Leader" : "Franchise"}
                   </div>
                 )}
               </div>
