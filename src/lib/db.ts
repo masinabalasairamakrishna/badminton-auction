@@ -206,14 +206,15 @@ export function placeBid(teamId: string, amount?: number): { success: boolean; m
 
   // Determine bid amount
   let newAmount: number;
-  if (amount && amount > state.currentBid) {
+  if (amount && (amount > state.currentBid || (!state.highestBidTeamId && amount >= state.currentBid))) {
     newAmount = amount;
   } else {
     // If no bids yet, first bid can be at basePrice or basePrice + increment
     if (!state.highestBidTeamId) {
       newAmount = state.currentBid; // Open at base price
     } else {
-      newAmount = state.currentBid + (state.selectedIncrement || 100);
+      const defaultInc = db.settings.bidIncrements?.[0] || 20;
+      newAmount = state.currentBid + (state.selectedIncrement || defaultInc);
     }
   }
 

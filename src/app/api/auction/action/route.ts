@@ -23,15 +23,15 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { action, role, captainTeamId } = body;
 
-    // Security check: Captains can ONLY perform "BID" action for their own team
+    // Security check: Captains can perform "BID" and "SET_INCREMENT"
     if (role === "captain") {
-      if (action !== "BID") {
+      if (action !== "BID" && action !== "SET_INCREMENT") {
         return NextResponse.json(
-          { success: false, message: "Captains only have permission to place bids." },
+          { success: false, message: "Captains only have permission to place bids and select increments." },
           { status: 403 }
         );
       }
-      if (captainTeamId && body.teamId && body.teamId !== captainTeamId) {
+      if (action === "BID" && captainTeamId && body.teamId && body.teamId !== captainTeamId) {
         return NextResponse.json(
           { success: false, message: "Captains can only place bids for their own team." },
           { status: 403 }

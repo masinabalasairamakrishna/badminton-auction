@@ -11,7 +11,7 @@
       50,
       100
     ],
-    "minSquadSize": 4,
+    "minSquadSize": 6,
     "maxSquadSize": 8,
     "soundEnabled": true
   },
@@ -209,15 +209,26 @@
     "currentBid": 20,
     "highestBidTeamId": null,
     "highestBidTeamName": null,
-    "timerSeconds": 459,
+    "timerSeconds": 524,
     "initialTimerSeconds": 600,
-    "selectedIncrement": 20,
+    "selectedIncrement": 10,
     "isSoundEnabled": true,
     "bidHistory": [],
     "currentRound": 1,
     "lastAction": "Auction started for ADAPA govind varma at 20 coins"
   },
   "bids": [
+    {
+      "id": "bid-1789706159239-wcyx",
+      "playerId": "imported-1789373220970-3",
+      "playerName": "Masina Bala Sai Rama Krishna",
+      "teamId": "team-2",
+      "teamName": "Court Crushers",
+      "teamColor": "#10b981",
+      "amount": 20,
+      "timestamp": "10:05:59 am",
+      "adminUser": "Admin"
+    },
     {
       "id": "bid-1789373258753-h55u",
       "playerId": "imported-1789373220969-1",

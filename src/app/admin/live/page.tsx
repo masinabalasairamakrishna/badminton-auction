@@ -41,6 +41,10 @@ export default function LiveAuctionPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedPlayerForModal, setSelectedPlayerForModal] = useState<Player | null>(null);
 
+  // Captain controlled increment state
+  const [captainIncrement, setCaptainIncrement] = useState<number>(20);
+  const [openAtBase, setOpenAtBase] = useState<boolean>(true);
+
   // Sold modal celebration state
   const [soldModalOpen, setSoldModalOpen] = useState(false);
   const [soldPlayer, setSoldPlayer] = useState<Player | null>(null);
@@ -131,6 +135,15 @@ export default function LiveAuctionPage() {
     }
     previousTimerSecRef.current = sec;
   }, [db]);
+
+  // Sync openAtBase when player or highest bidder changes
+  useEffect(() => {
+    if (!db?.auctionState.highestBidTeamId) {
+      setOpenAtBase(true);
+    } else {
+      setOpenAtBase(false);
+    }
+  }, [db?.auctionState.currentPlayerId, db?.auctionState.highestBidTeamId]);
 
   // 4. Admin Timer Countdown Runner
   useEffect(() => {
@@ -335,13 +348,22 @@ export default function LiveAuctionPage() {
     ? auctionState.currentBid
     : auctionState.currentBid + nextIncrement;
 
-  // Captain helper calculations
+  // Captain helper calculations & dynamic increment
   const captainTeam =
     role === "captain" && currentUser?.teamId
       ? teams.find((t) => t.id === currentUser.teamId)
       : null;
   const isMyTeamLeading = captainTeam ? auctionState.highestBidTeamId === captainTeam.id : false;
-  const canMyTeamAfford = captainTeam ? captainTeam.remainingBudget >= nextBidAmount : false;
+
+  const isOpeningBid = !auctionState.highestBidTeamId;
+  const activeCaptainIncrement = captainIncrement || nextIncrement;
+  const captainNextBidAmount = isOpeningBid && openAtBase
+    ? auctionState.currentBid
+    : isOpeningBid
+    ? auctionState.currentBid + activeCaptainIncrement
+    : auctionState.currentBid + activeCaptainIncrement;
+
+  const canMyTeamAfford = captainTeam ? captainTeam.remainingBudget >= captainNextBidAmount : false;
 
   // Next up in queue: sequentially advance from current player's queueOrder
   const currentOrder = currentPlayer?.queueOrder || 0;
@@ -970,17 +992,39 @@ export default function LiveAuctionPage() {
 
                 {/* Captain Bid Controls */}
                 <div className="flex flex-col sm:flex-row items-center gap-2">
+                  {/* Step increment selector controlled by Captain */}
                   <div className="flex items-center gap-1 w-full sm:w-auto">
+                    {isOpeningBid && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenAtBase(true);
+                        }}
+                        className={`flex-1 sm:flex-initial py-1 px-2.5 rounded-lg text-xs font-black transition ${
+                          openAtBase
+                            ? "bg-amber-400 text-slate-950 shadow-md ring-2 ring-amber-300"
+                            : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                        }`}
+                        title="Open at player's base price"
+                      >
+                        Base ({auctionState.currentBid})
+                      </button>
+                    )}
                     {(settings.bidIncrements || [10, 20, 50, 100]).map((inc) => (
                       <button
                         key={inc}
                         type="button"
-                        onClick={() => sendAction("SET_INCREMENT", { increment: inc })}
-                        className={`flex-1 sm:flex-initial py-1 px-2 rounded-lg text-xs font-black transition ${
-                          auctionState.selectedIncrement === inc
-                            ? "bg-emerald-500 text-slate-950 shadow-xs"
+                        onClick={() => {
+                          setOpenAtBase(false);
+                          setCaptainIncrement(inc);
+                          sendAction("SET_INCREMENT", { increment: inc });
+                        }}
+                        className={`flex-1 sm:flex-initial py-1 px-2.5 rounded-lg text-xs font-black transition ${
+                          (!openAtBase || !isOpeningBid) && activeCaptainIncrement === inc
+                            ? "bg-emerald-500 text-slate-950 shadow-md ring-2 ring-emerald-400"
                             : "bg-slate-800 text-slate-300 hover:bg-slate-700"
                         }`}
+                        title={`Select +${inc} increment`}
                       >
                         +{inc}
                       </button>
@@ -989,7 +1033,7 @@ export default function LiveAuctionPage() {
 
                   <button
                     type="button"
-                    onClick={() => handlePlaceBid(captainTeam.id)}
+                    onClick={() => handlePlaceBid(captainTeam.id, captainNextBidAmount)}
                     disabled={
                       isMyTeamLeading ||
                       !canMyTeamAfford ||
@@ -1006,12 +1050,14 @@ export default function LiveAuctionPage() {
                     <Trophy className="w-3.5 h-3.5 fill-current" />
                     <span>
                       {isMyTeamLeading
-                        ? "Leading!"
+                        ? "Your Team Leads!"
                         : !canMyTeamAfford
-                        ? "Low Purse"
+                        ? "Low Team Purse"
                         : auctionState.status !== "LIVE"
-                        ? "Waiting..."
-                        : `+ BID ${formatCurrency(nextBidAmount, currency)}`}
+                        ? "Waiting For Bidding..."
+                        : isOpeningBid && openAtBase
+                        ? `+ OPEN BID AT ${formatCurrency(captainNextBidAmount, currency)}`
+                        : `+ BID ${formatCurrency(captainNextBidAmount, currency)} (+${activeCaptainIncrement})`}
                     </span>
                   </button>
                 </div>
@@ -1075,28 +1121,18 @@ export default function LiveAuctionPage() {
                 )}
               </div>
 
-              {/* Bid Increment Selector (for Admin) */}
+              {/* Bid Increment Info (Admin view - handled by captains) */}
               {role === "admin" && (
-                <div className="mb-2">
-                  <div className="flex items-center justify-between text-[11px] mb-1 font-bold text-slate-400">
-                    <span className="uppercase">Bid Step</span>
-                    <span className="text-emerald-400">Next: {formatCurrency(nextBidAmount, currency)}</span>
+                <div className="mb-2 p-2 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Active Bid Step</span>
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/30 text-xs">
+                      +{auctionState.selectedIncrement || 20}
+                    </span>
                   </div>
-                  <div className="grid grid-cols-4 gap-1">
-                    {(settings.bidIncrements || [10, 20, 50, 100]).map((inc) => (
-                      <button
-                        key={inc}
-                        onClick={() => sendAction("SET_INCREMENT", { increment: inc })}
-                        className={`py-1 px-1.5 rounded-lg text-xs font-black transition ${
-                          auctionState.selectedIncrement === inc
-                            ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
-                            : "bg-slate-800/80 text-slate-300 hover:bg-slate-800"
-                        }`}
-                      >
-                        +{inc}
-                      </button>
-                    ))}
-                  </div>
+                  <span className="text-[10px] text-slate-400 font-semibold italic">
+                    (Controlled by Captains)
+                  </span>
                 </div>
               )}
             </div>
@@ -1270,7 +1306,7 @@ export default function LiveAuctionPage() {
                   </button>
                 ) : role === "captain" && currentUser?.teamId === team.id ? (
                   <button
-                    onClick={() => handlePlaceBid(team.id)}
+                    onClick={() => handlePlaceBid(team.id, captainNextBidAmount)}
                     disabled={
                       !canAfford ||
                       auctionState.status !== "LIVE" ||
@@ -1289,7 +1325,7 @@ export default function LiveAuctionPage() {
                     ) : !canAfford ? (
                       <span>Low Purse</span>
                     ) : (
-                      <span>+ BID {nextBidAmount}</span>
+                      <span>+ BID {captainNextBidAmount}</span>
                     )}
                   </button>
                 ) : role === "captain" ? (
