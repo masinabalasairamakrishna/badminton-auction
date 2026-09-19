@@ -23,13 +23,30 @@ export default function PlayerAvatar({
   playerId,
   onPhotoUpdated,
 }: PlayerAvatarProps) {
+  const [currentSrc, setCurrentSrc] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
+  const [retryAttempt, setRetryAttempt] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Reset error if photo URL changes
+  // Reset error & source if photo prop changes
   useEffect(() => {
-    setHasError(false);
+    const resolved = resolvePlayerPhoto(photo);
+    setCurrentSrc(resolved);
+    setHasError(!resolved);
+    setRetryAttempt(0);
   }, [photo]);
+
+  const handleImageError = () => {
+    if (photo && retryAttempt === 0) {
+      const match = photo.match(/\/d\/([a-zA-Z0-9_-]+)/) || photo.match(/id=([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        setRetryAttempt(1);
+        setCurrentSrc(`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`);
+        return;
+      }
+    }
+    setHasError(true);
+  };
 
   const sizeClasses = {
     sm: "w-10 h-10 sm:w-11 sm:h-11 rounded-xl text-xs",
@@ -86,12 +103,13 @@ export default function PlayerAvatar({
     <div
       className={`relative group/avatar overflow-hidden bg-slate-900 border border-slate-700/80 flex items-center justify-center flex-shrink-0 shadow-md select-none ${sizeClasses} ${className}`}
     >
-      {photo && !hasError ? (
+      {currentSrc && !hasError ? (
         <img
-          src={resolvePlayerPhoto(photo) || photo}
+          key={`${name}-${currentSrc}`}
+          src={currentSrc}
           alt={name}
           referrerPolicy="no-referrer"
-          onError={() => setHasError(true)}
+          onError={handleImageError}
           className="w-full h-full object-cover"
         />
       ) : (

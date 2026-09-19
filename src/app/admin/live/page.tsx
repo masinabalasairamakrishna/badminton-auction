@@ -36,7 +36,82 @@ import PlayerCardModal from "@/components/PlayerCardModal";
 import RulesModal from "@/components/RulesModal";
 import CaptainSquadModal from "@/components/CaptainSquadModal";
 import { downloadTeamSquadCSV } from "@/lib/exportUtils";
-import { formatCurrency, resolvePlayerPhoto } from "@/lib/utils";
+import { formatCurrency, resolvePlayerPhoto, extractDriveFileId } from "@/lib/utils";
+import PlayerAvatar from "@/components/PlayerAvatar";
+
+function LivePlayerHammerPhoto({
+  player,
+  containerClass,
+  isLive,
+}: {
+  player: Player | null | undefined;
+  containerClass: string;
+  isLive: boolean;
+}) {
+  const [currentSrc, setCurrentSrc] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    const resolved = resolvePlayerPhoto(player?.photo);
+    setCurrentSrc(resolved);
+    setHasError(!resolved);
+    setAttempt(0);
+  }, [player?.id, player?.photo]);
+
+  const handleImageError = () => {
+    if (player?.photo && attempt === 0) {
+      const driveId = extractDriveFileId(player.photo);
+      if (driveId) {
+        setAttempt(1);
+        setCurrentSrc(`https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`);
+        return;
+      }
+    }
+    if (player?.photo && attempt === 1) {
+      const driveId = extractDriveFileId(player.photo);
+      if (driveId) {
+        setAttempt(2);
+        setCurrentSrc(`https://drive.google.com/uc?export=view&id=${driveId}`);
+        return;
+      }
+    }
+    setHasError(true);
+  };
+
+  return (
+    <div
+      className={`${containerClass} rounded-2xl overflow-hidden border-3 sm:border-4 bg-slate-900 shadow-2xl transition-all duration-300 ${
+        isLive
+          ? "border-emerald-400 shadow-emerald-500/40 scale-102 ring-4 sm:ring-6 ring-emerald-500/20"
+          : "border-slate-700"
+      }`}
+    >
+      {currentSrc && !hasError ? (
+        <img
+          key={`${player?.id || "empty"}-${currentSrc}`}
+          src={currentSrc}
+          alt={player?.name || "Player"}
+          referrerPolicy="no-referrer"
+          onError={handleImageError}
+          className="w-full h-full object-cover object-top"
+        />
+      ) : (
+        <div className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4 bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900">
+          <span className="text-6xl sm:text-7xl lg:text-8xl">🏸</span>
+          <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-400 mt-2 text-center">
+            {player?.name || "Badminton Star"}
+          </span>
+          {player && (
+            <span className="text-[11px] font-semibold text-slate-500 mt-0.5">
+              {player.branch} • {player.playingType}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function LiveAuctionPage() {
   const { toast, success, error, info } = useToast();
@@ -704,27 +779,12 @@ export default function LiveAuctionPage() {
                     : "bg-slate-900/60 border-slate-800/80"
                 }`}>
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
-                      {nextPlayer.photo ? (
-                        <img
-                          src={resolvePlayerPhoto(nextPlayer.photo) || nextPlayer.photo}
-                          alt={nextPlayer.name}
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                            const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                            if (fallback) fallback.style.display = "flex";
-                          }}
-                          className="w-full h-full object-cover object-top"
-                        />
-                      ) : null}
-                      <span
-                        style={{ display: nextPlayer.photo ? "none" : "flex" }}
-                        className="text-base items-center justify-center h-full w-full bg-slate-800"
-                      >
-                        🏸
-                      </span>
-                    </div>
+                    <PlayerAvatar
+                      photo={nextPlayer.photo}
+                      name={nextPlayer.name}
+                      size="sm"
+                      className="w-11 h-11 !rounded-xl"
+                    />
                     <div className="min-w-0">
                       <span className="text-xs font-bold text-white block truncate">{nextPlayer.name}</span>
                       <span className="text-[10px] text-slate-400 block truncate">{nextPlayer.branch} • {nextPlayer.playingType}</span>
@@ -821,36 +881,11 @@ export default function LiveAuctionPage() {
 
             {/* Big Player Photo with Live Halo */}
             <div className="relative mb-3">
-              <div
-                className={`${photoContainerClass} rounded-2xl overflow-hidden border-3 sm:border-4 bg-slate-900 shadow-2xl transition-all duration-300 ${
-                  auctionState.status === "LIVE"
-                    ? "border-emerald-400 shadow-emerald-500/40 scale-102 ring-4 sm:ring-6 ring-emerald-500/20"
-                    : "border-slate-700"
-                }`}
-              >
-                {currentPlayer?.photo ? (
-                  <img
-                    src={resolvePlayerPhoto(currentPlayer.photo) || currentPlayer.photo}
-                    alt={currentPlayer.name}
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = "flex";
-                    }}
-                    className="w-full h-full object-cover object-top"
-                  />
-                ) : null}
-                <div
-                  style={{ display: currentPlayer?.photo ? "none" : "flex" }}
-                  className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4"
-                >
-                  <span className="text-6xl sm:text-7xl lg:text-8xl">🏸</span>
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 mt-2">
-                    {currentPlayer?.name || "Badminton Star"}
-                  </span>
-                </div>
-              </div>
+              <LivePlayerHammerPhoto
+                player={currentPlayer}
+                containerClass={photoContainerClass}
+                isLive={auctionState.status === "LIVE"}
+              />
 
               {/* Quick Admin / Captain Photo Upload Button */}
               {(role === "admin" || role === "captain") && currentPlayer && (

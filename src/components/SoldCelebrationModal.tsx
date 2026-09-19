@@ -6,6 +6,7 @@ import { Award, ArrowRight, X } from "lucide-react";
 import { soundManager } from "@/lib/audio";
 import { Player, Team } from "@/types";
 import { formatCurrency, resolvePlayerPhoto } from "@/lib/utils";
+import PlayerAvatar from "@/components/PlayerAvatar";
 
 interface SoldModalProps {
   isOpen: boolean;
@@ -88,27 +89,12 @@ export default function SoldCelebrationModal({
         {/* Player Photo & Details */}
         <div className="flex flex-col items-center mb-6">
           <div className="relative mb-4">
-            <div className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-full overflow-hidden border-4 sm:border-6 border-amber-400 shadow-2xl bg-slate-800">
-              {player.photo ? (
-                <img
-                  src={resolvePlayerPhoto(player.photo) || player.photo}
-                  alt={player.name}
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                    const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                    if (fallback) fallback.style.display = "flex";
-                  }}
-                  className="w-full h-full object-cover"
-                />
-              ) : null}
-              <div
-                style={{ display: player.photo ? "none" : "flex" }}
-                className="w-full h-full items-center justify-center text-5xl bg-slate-800"
-              >
-                🏸
-              </div>
-            </div>
+            <PlayerAvatar
+              photo={player.photo}
+              name={player.name}
+              size="xl"
+              className="!rounded-full border-4 sm:border-6 !border-amber-400 shadow-2xl"
+            />
             <div className="absolute -bottom-2 -right-2 bg-amber-500 text-slate-950 p-2 rounded-full shadow-lg font-bold">
               <Award className="w-6 h-6" />
             </div>
